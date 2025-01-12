@@ -62,14 +62,11 @@ describe('Users Tests', () => {
     });
 
     test('Test create user with existing username', async () => {
-        const { statusCode } = await request(app)
-            .post('/users')
-            .send({
-                username: 'testuser',
-                email: 'example@gmail.com',
-                password: 'testpassword',
-                birthDate: new Date('1990-01-01'),
-            });
+        const { statusCode } = await request(app).post('/users').send({
+            username: 'testuser',
+            email: 'example@gmail.com',
+            password: 'testpassword',
+        });
         expect(statusCode).toBe(400);
     });
 });
