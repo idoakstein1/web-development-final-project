@@ -1,9 +1,10 @@
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import { config } from 'dotenv';
 import Express, { NextFunction, Request, Response } from 'express';
-import { getConfig, initDBConnection } from '../services';
-import { authRouter, userRouter } from '../router';
 import { authenticate } from '../middlewares';
+import { authRouter, userRouter } from '../router';
+import { getConfig, initDBConnection } from '../services';
 
 config();
 
@@ -13,6 +14,7 @@ export const initApp = async () => {
 
     const app = Express();
 
+    app.use(cors());
     app.use(bodyParser.json());
     app.use('/auth', authRouter);
 
