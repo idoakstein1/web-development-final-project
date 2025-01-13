@@ -12,6 +12,9 @@ let testUser: User & { _id: string } = {
     email: 'test@user.com',
     password: 'testpassword',
     _id: '',
+    firstName: 'test',
+    lastName: 'user',
+    tokens: [],
 };
 let userId: string;
 
@@ -41,6 +44,8 @@ describe('Users Tests', () => {
     });
     test('Test create user with missing body param - username', async () => {
         const { statusCode } = await request(app).post('/users').send({
+            firstName: 'test',
+            lastName: 'user',
             email: 'example@gmail.com',
             password: 'testpassword',
         });
@@ -48,6 +53,8 @@ describe('Users Tests', () => {
     });
     test('Test create user with missing body param - email', async () => {
         const { statusCode } = await request(app).post('/users').send({
+            firstName: 'test',
+            lastName: 'user',
             username: 'tests242q',
             password: 'testpassword',
         });
@@ -55,6 +62,26 @@ describe('Users Tests', () => {
     });
     test('Test create user with missing body param - password', async () => {
         const { statusCode } = await request(app).post('/users').send({
+            firstName: 'test',
+            lastName: 'user',
+            email: 'example@gmail.com',
+            username: 'testpassword',
+        });
+        expect(statusCode).toBe(400);
+    });
+    test('Test create user with missing body param - firstName', async () => {
+        const { statusCode } = await request(app).post('/users').send({
+            password: 'test',
+            lastName: 'user',
+            email: 'example@gmail.com',
+            username: 'testpassword',
+        });
+        expect(statusCode).toBe(400);
+    });
+    test('Test create user with missing body param - lastName', async () => {
+        const { statusCode } = await request(app).post('/users').send({
+            firstName: 'test',
+            password: 'user',
             email: 'example@gmail.com',
             username: 'testpassword',
         });
@@ -62,14 +89,11 @@ describe('Users Tests', () => {
     });
 
     test('Test create user with existing username', async () => {
-        const { statusCode } = await request(app)
-            .post('/users')
-            .send({
-                username: 'testuser',
-                email: 'example@gmail.com',
-                password: 'testpassword',
-                birthDate: new Date('1990-01-01'),
-            });
+        const { statusCode } = await request(app).post('/users').send({
+            username: 'testuser',
+            email: 'example@gmail.com',
+            password: 'testpassword',
+        });
         expect(statusCode).toBe(400);
     });
 });
