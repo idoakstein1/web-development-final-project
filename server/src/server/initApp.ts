@@ -2,7 +2,8 @@ import bodyParser from 'body-parser';
 import { config } from 'dotenv';
 import Express, { NextFunction, Request, Response } from 'express';
 import { getConfig, initDBConnection } from '../services';
-import { userRouter } from '../router';
+import { authRouter, userRouter } from '../router';
+import { authenticate } from '../middlewares';
 
 config();
 
@@ -13,6 +14,9 @@ export const initApp = async () => {
     const app = Express();
 
     app.use(bodyParser.json());
+    app.use('/auth', authRouter);
+
+    app.use(authenticate);
     app.use('/users', userRouter);
 
     app.use((_err: Error, _req: Request, res: Response, _next: NextFunction) => {

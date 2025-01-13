@@ -5,9 +5,9 @@ import { createUser } from '../bl';
 export const userRouter = Router();
 
 userRouter.post('/', async (req, res) => {
-    const { username, email, password } = req.body;
-    if (!username || !email || !password) {
-        res.status(400).send({ message: 'body param is missing (username, email, password)' });
+    const { username, email, password, firstName, lastName } = req.body;
+    if (!username || !email || !password || !firstName || !lastName) {
+        res.status(400).send({ message: 'body param is missing (username, email, password, firstName, lastName)' });
         return;
     }
     if (await isUsernameExists(username)) {
@@ -15,6 +15,6 @@ userRouter.post('/', async (req, res) => {
         return;
     }
 
-    const user = await createUser({ username, email, password });
+    const user = await createUser({ username, email, password, firstName, lastName });
     res.status(200).send(user);
 });
