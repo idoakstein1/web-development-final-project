@@ -1,13 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Typography, useTheme } from '@mui/material';
+import { isAxiosError } from 'axios';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { NavLink, useNavigate } from 'react-router';
 import { z } from 'zod';
 import { API } from '../../api';
 import { FormTextField, PasswordField } from '../../components/fields';
+import { PopUpAlert } from '../../components/PopUpAlert';
 import { useAuth } from '../../hooks';
 import { formContainerStyle } from './styles';
-import { useNavigate } from 'react-router';
 
 const formSchema = z.object({
     username: z.string().nonempty('Username cannot be empty'),
@@ -16,6 +18,7 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 export const LogInPage = () => {
+    const { palette } = useTheme();
     const navigate = useNavigate();
     const { setAccessToken, setRefreshToken, setUser } = useAuth();
     const {
@@ -28,6 +31,8 @@ export const LogInPage = () => {
         defaultValues: { username: '', password: '' },
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isShowAlert, setIsShowAlert] = useState(false);
+    const [alertContent, setAlertContent] = useState<string | undefined>();
 
     const onSubmit = async ({ username, password }: FormSchema) => {
         if (isSubmitted) {
@@ -35,12 +40,22 @@ export const LogInPage = () => {
         }
         setIsSubmitted(true);
 
-        const { accessToken, refreshToken, user } = await API.user.logIn(username, password);
-        setAccessToken(accessToken);
-        setRefreshToken(refreshToken);
-        setUser(user);
+        try {
+            const { accessToken, refreshToken, user } = await API.user.logIn(username, password);
+            setAccessToken(accessToken);
+            setRefreshToken(refreshToken);
+            setUser(user);
 
-        navigate('/');
+            navigate('/');
+        } catch (error) {
+            setIsShowAlert(true);
+
+            if (isAxiosError(error)) {
+                setAlertContent(error.response?.data.message);
+            }
+        }
+
+        setIsSubmitted(false);
     };
 
     return (
@@ -53,6 +68,10 @@ export const LogInPage = () => {
             <Button onClick={handleSubmit(onSubmit)} variant="contained" disabled={!isValid}>
                 Log In
             </Button>
+            <NavLink to="/signUp" style={{ color: palette.primary.main }}>
+                Don't have an account?
+            </NavLink>
+            <PopUpAlert isShowAlert={isShowAlert} setIsShowAlert={setIsShowAlert} alertContent={alertContent} />
         </Box>
     );
 };

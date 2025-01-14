@@ -5,12 +5,6 @@ import { HomePage, LogInPage, ProfilePage, SignUpPage, WatchLaterPage } from '..
 import { NavBar } from '../NavBar';
 import { dividerStyle } from './styles';
 
-/*
-TODO:
-1. add a link to navigate between sign up and log in pages
-2. add error handling for sign up and log in pages + feedback to user
-*/
-
 export const App = () => {
     const { user } = useAuth();
     const isAuthenticated = user !== null;
