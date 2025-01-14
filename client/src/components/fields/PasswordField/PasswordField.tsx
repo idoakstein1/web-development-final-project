@@ -1,14 +1,17 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { IconButton, InputAdornment } from '@mui/material';
 import { useState } from 'react';
-import { User } from '../../../types';
+import { FieldValues, Path } from 'react-hook-form';
 import { FormTextField, FormTextFieldProps } from '../FormTextField';
 
-export const PasswordField = ({ control, ...props }: Omit<FormTextFieldProps<User>, 'name' | 'label'>) => {
+export const PasswordField = <T extends FieldValues>({
+    control,
+    ...props
+}: Omit<FormTextFieldProps<T>, 'name' | 'label'>) => {
     const [showPassword, setShowPassword] = useState(false);
 
-    const passwordFieldProps: FormTextFieldProps<User> = {
-        name: 'password',
+    const passwordFieldProps: FormTextFieldProps<T> = {
+        name: 'password' as Path<T>,
         label: 'Password',
         control,
         type: showPassword ? 'text' : 'password',

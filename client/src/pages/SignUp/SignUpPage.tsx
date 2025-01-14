@@ -6,6 +6,7 @@ import { API } from '../../api';
 import { FormTextField, PasswordField } from '../../components/fields';
 import { formContainerStyle } from './styles';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 const formSchema = z.object({
     username: z.string().min(3, 'Username must be at least 3 characters'),
@@ -22,12 +23,14 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 export const SignUpPage = () => {
+    const navigate = useNavigate();
     const {
         handleSubmit,
         control,
         formState: { isValid },
     } = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
+        mode: 'onChange',
         defaultValues: { username: '', email: '', password: '', firstName: '', lastName: '' },
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -37,7 +40,10 @@ export const SignUpPage = () => {
             return;
         }
         setIsSubmitted(true);
+
         await API.user.create(data);
+
+        navigate('/logIn');
     };
 
     return (
