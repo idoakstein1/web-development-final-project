@@ -14,7 +14,7 @@ let testUser: User & { _id: string } = {
     _id: '',
     tokens: [],
 };
-let userId: string;
+let accessToken: string;
 
 beforeAll(async () => {
     app = await global.initTestServer();
@@ -33,7 +33,6 @@ describe('Users Tests', () => {
             statusCode,
             body: { _id, username, email, password },
         } = await request(app).post('/users').send(testUser);
-        userId = _id;
         expect(statusCode).toBe(200);
         expect(username).toBe(testUser.username);
         expect(email).toBe(testUser.email);
@@ -69,5 +68,30 @@ describe('Users Tests', () => {
             password: 'testpassword',
         });
         expect(statusCode).toBe(400);
+    });
+
+    test('Test find user by username', async () => {
+        const { body } = await request(app).post('/auth/login').send({
+            username: testUser.username,
+            password: testUser.password,
+        });
+
+        accessToken = body.accessToken;
+
+        const {
+            statusCode,
+            body: { username, email },
+        } = await request(app)
+            .get(`/users/${testUser.username}`)
+            .set({ authorization: 'bearer ' + accessToken });
+        expect(statusCode).toBe(200);
+        expect(username).toBe(testUser.username);
+        expect(email).toBe(testUser.email);
+    });
+    test('Test find user by username - not found', async () => {
+        const { statusCode } = await request(app)
+            .get('/users/notfound')
+            .set({ authorization: 'bearer ' + accessToken });
+        expect(statusCode).toBe(404);
     });
 });

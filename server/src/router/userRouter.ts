@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { isUsernameExists } from '../dal';
+import { isUsernameExists, findUserByUsername } from '../dal';
 import { createUser } from '../bl';
 
 export const userRouter = Router();
@@ -16,5 +16,15 @@ userRouter.post('/', async (req, res) => {
     }
 
     const user = await createUser({ username, email, password });
+    res.status(200).send(user);
+});
+
+userRouter.get('/:username', async (req, res) => {
+    const { username } = req.params;
+    const user = await findUserByUsername(username);
+    if (!user) {
+        res.status(404).send({ message: `username: ${username} not found` });
+        return;
+    }
     res.status(200).send(user);
 });
