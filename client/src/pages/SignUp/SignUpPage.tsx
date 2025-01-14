@@ -1,11 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Typography, useTheme } from '@mui/material';
+import { isAxiosError } from 'axios';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { NavLink, useNavigate } from 'react-router';
 import z from 'zod';
 import { API } from '../../api';
 import { FormTextField, PasswordField } from '../../components/fields';
+import { PopUpAlert } from '../../components/PopUpAlert';
 import { formContainerStyle } from './styles';
-import { useState } from 'react';
 
 const formSchema = z.object({
     username: z.string().min(3, 'Username must be at least 3 characters'),
@@ -16,28 +19,44 @@ const formSchema = z.object({
         .regex(/[0-9]/, 'Password must include at least one number')
         .regex(/[A-Z]/, 'Password must include at least one uppercase letter')
         .regex(/[a-z]/, 'Password must include at least one lowercase letter'),
-    firstName: z.string().min(2, 'First name must be at least 2 characters'),
-    lastName: z.string().min(2, 'Last name must be at least 2 characters'),
 });
 type FormSchema = z.infer<typeof formSchema>;
 
 export const SignUpPage = () => {
+    const { palette } = useTheme();
+    const navigate = useNavigate();
     const {
         handleSubmit,
         control,
         formState: { isValid },
     } = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
-        defaultValues: { username: '', email: '', password: '', firstName: '', lastName: '' },
+        mode: 'onChange',
+        defaultValues: { username: '', email: '', password: '' },
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isShowAlert, setIsShowAlert] = useState(false);
+    const [alertContent, setAlertContent] = useState<string | undefined>();
 
     const onSubmit = async (data: FormSchema) => {
         if (isSubmitted) {
             return;
         }
         setIsSubmitted(true);
-        await API.user.create(data);
+
+        try {
+            await API.user.create(data);
+
+            navigate('/logIn');
+        } catch (error) {
+            setIsShowAlert(true);
+
+            if (isAxiosError(error)) {
+                setAlertContent(error.response?.data.message);
+            }
+        }
+
+        setIsSubmitted(false);
     };
 
     return (
@@ -47,14 +66,14 @@ export const SignUpPage = () => {
                 <FormTextField label="Username" name="username" control={control} />
                 <FormTextField label="Email" name="email" control={control} />
                 <PasswordField control={control} />
-                <Box sx={{ display: 'flex', gap: '2vh' }}>
-                    <FormTextField label="First Name" name="firstName" control={control} />
-                    <FormTextField label="Last Name" name="lastName" control={control} />
-                </Box>
             </Box>
             <Button onClick={handleSubmit(onSubmit)} variant="contained" disabled={!isValid}>
                 Sign Up
             </Button>
+            <NavLink to="/logIn" style={{ color: palette.primary.main }}>
+                Already have an account?
+            </NavLink>
+            <PopUpAlert isShowAlert={isShowAlert} setIsShowAlert={setIsShowAlert} alertContent={alertContent} />
         </Box>
     );
 };

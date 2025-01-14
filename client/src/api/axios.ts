@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
-let axiosInstance: Axios.AxiosInstance;
+let axiosInstance: AxiosInstance;
 
 export const getAxios = () => {
     if (axiosInstance) {
