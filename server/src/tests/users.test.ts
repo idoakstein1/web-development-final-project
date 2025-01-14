@@ -112,8 +112,6 @@ describe('Users Tests', () => {
         expect(statusCode).toBe(400);
     });
 
-    //create another user and test update with existing username
-
     test('Test update user with existing username', async () => {
         const { body } = await request(app).post('/users').send({
             username: 'guy',

@@ -80,21 +80,13 @@ describe('Auth Tests', () => {
     });
 
     test('Auth test me', async () => {
-        // const response = await request(app).post('/posts').send({
-        //     title: 'Test Post',
-        //     content: 'Test Content',
-        //     owner: 'sdfSd',
-        // });
-        // expect(response.statusCode).not.toBe(200);
-        // const response2 = await request(app)
-        //     .post('/posts')
-        //     .set({ authorization: 'bearer ' + testUser.accessToken })
-        //     .send({
-        //         title: 'Test Post',
-        //         content: 'Test Content',
-        //         sender: testUserId,
-        //     });
-        // expect(response2.statusCode).toBe(200);
+        const response = await request(app).get('/users/' + testUser.username);
+        expect(response.statusCode).not.toBe(200);
+        const response2 = await request(app)
+            .get('/users/' + testUser.username)
+            .set({ authorization: 'bearer ' + testUser.accessToken });
+
+        expect(response2.statusCode).toBe(200);
     });
 
     test('Test refresh token', async () => {
@@ -165,26 +157,23 @@ describe('Auth Tests', () => {
         expect(response5.statusCode).toBe(400);
     });
 
-    test('Test auth middleware', async () => {
-        // const response = await request(app)
-        //     .post('/posts')
-        //     .send({ title: 'Test Post', content: 'Test Content', sender: testUserId });
-        // expect(response.statusCode).not.toBe(200);
-        // const response2 = await request(app)
-        //     .post('/posts')
-        //     .set({ authorization: 'bear ' + testUser.accessToken })
-        //     .send({ title: 'Test Post', content: 'Test Content', sender: testUserId });
-        // expect(response2.statusCode).toBe(401);
-        // const response3 = await request(app).post('/posts').set({ authorization: 'bearer aaaaaa' }).send({
-        //     title: 'Test Post',
-        //     content: 'Test Content',
-        //     sender: testUserId,
-        // });
-        // expect(response3.statusCode).toBe(401);
-        // const response4 = await request(app)
-        //     .post('/posts')
-        //     .set({ authorization: 'bearer ' + testUser.accessToken })
-        //     .send({ title: 'Test Post', content: 'Test Content', sender: testUserId });
-        // expect(response4.statusCode).toBe(200);
-    });
+    // test('Test auth middleware', async () => {
+    //     const response = await request(app).get('/users/' + testUser.username);
+    //     expect(response.statusCode).not.toBe(200);
+    //     const response2 = await request(app)
+    //         .get('/users/' + testUser.username)
+    //         .set({ authorization: 'bear ' + testUser.accessToken });
+    //     expect(response2.statusCode).toBe(401);
+    //     const response3 = await request(app).post('/posts').set({ authorization: 'bearer aaaaaa' }).send({
+    //         title: 'Test Post',
+    //         content: 'Test Content',
+    //         sender: testUserId,
+    //     });
+    //     expect(response3.statusCode).toBe(401);
+    //     const response4 = await request(app)
+    //         .post('/posts')
+    //         .set({ authorization: 'bearer ' + testUser.accessToken })
+    //         .send({ title: 'Test Post', content: 'Test Content', sender: testUserId });
+    //     expect(response4.statusCode).toBe(200);
+    // });
 });
