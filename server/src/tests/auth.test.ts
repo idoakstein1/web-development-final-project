@@ -6,8 +6,6 @@ import { userModel, User } from '../models/user';
 var app: Express;
 
 const testUserInfo = {
-    firstName: 'Test',
-    lastName: 'User',
     email: 'test@user.com',
     password: 'testpassword',
     username: 'test',
@@ -44,8 +42,10 @@ describe('Auth Tests', () => {
         expect(response.statusCode).toBe(200);
         const accessToken = response.body.accessToken;
         const refreshToken = response.body.refreshToken;
+        const user = response.body.user;
         expect(accessToken).toBeDefined();
         expect(refreshToken).toBeDefined();
+        expect(user).toEqual({ username: testUser.username, email: testUser.email });
         testUser.accessToken = accessToken;
         testUser.refreshToken = refreshToken;
     });

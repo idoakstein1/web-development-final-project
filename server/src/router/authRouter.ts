@@ -23,7 +23,7 @@ authRouter.post('/login', async (req, res) => {
     user.tokens.push(refreshToken);
     await user.save();
 
-    res.status(200).send({ accessToken, refreshToken });
+    res.status(200).send({ accessToken, refreshToken, user: { username: user.username, email: user.email } });
 });
 
 authRouter.post('/logout', async (req, res) => {
