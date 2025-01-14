@@ -11,3 +11,13 @@ export const findUserByUsername = async (
     username: string,
     projection: ProjectionFields<User> = { password: 0, tokens: 0 }
 ) => userModel.findOne({ username }, projection);
+
+export const updateUser = async ({
+    oldUsername,
+    username,
+    email,
+}: {
+    oldUsername: User['username'];
+    username: User['username'];
+    email: User['email'];
+}) => userModel.findOneAndUpdate({ username: oldUsername }, { username, email }, { new: true });

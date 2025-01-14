@@ -1,1 +1,1 @@
-export { createUser, isUsernameExists, getUserById, findUserByUsername } from './user';
+export { createUser, isUsernameExists, getUserById, findUserByUsername, updateUser } from './user';

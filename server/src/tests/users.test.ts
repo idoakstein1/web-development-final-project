@@ -94,4 +94,46 @@ describe('Users Tests', () => {
             .set({ authorization: 'bearer ' + accessToken });
         expect(statusCode).toBe(404);
     });
+
+    test('Test update user', async () => {
+        const { statusCode, body } = await request(app)
+            .patch(`/users/${testUser.username}`)
+            .send({ username: 'newusername' })
+            .set({ authorization: 'bearer ' + accessToken });
+        expect(statusCode).toBe(200);
+        expect(body.username).toBe('newusername');
+        testUser.username = 'newusername';
+    });
+
+    test('Test update user with missing body param - username and email', async () => {
+        const { statusCode } = await request(app)
+            .patch(`/users/${testUser.username}`)
+            .set({ authorization: 'bearer ' + accessToken });
+        expect(statusCode).toBe(400);
+    });
+
+    //create another user and test update with existing username
+
+    test('Test update user with existing username', async () => {
+        const { body } = await request(app).post('/users').send({
+            username: 'guy',
+            password: '123',
+            email: 'test',
+        });
+
+        const { statusCode } = await request(app)
+            .patch(`/users/${testUser.username}`)
+            .send({ username: 'guy' })
+            .set({ authorization: 'bearer ' + accessToken });
+        expect(statusCode).toBe(400);
+    });
+
+    test('Test update other user data', async () => {
+        const { statusCode, body } = await request(app)
+            .patch(`/users/ddddd`)
+            .send({ username: 'fdsfsdf' })
+            .set({ authorization: 'bearer ' + accessToken });
+
+        expect(statusCode).toBe(401);
+    });
 });
