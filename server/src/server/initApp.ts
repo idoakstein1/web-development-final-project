@@ -2,7 +2,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { config } from 'dotenv';
 import Express, { NextFunction, Request, Response } from 'express';
-import { authenticate } from '../middlewares';
+import { authenticate, errorHandler } from '../middlewares';
 import { authRouter, userRouter } from '../router';
 import { getConfig, initDBConnection } from '../services';
 
@@ -20,6 +20,8 @@ export const initApp = async () => {
 
     app.use(authenticate);
     app.use('/users', userRouter);
+
+    app.use(errorHandler);
 
     app.use((_err: Error, _req: Request, res: Response, _next: NextFunction) => {
         res.status(500).send({ message: 'Error' });
