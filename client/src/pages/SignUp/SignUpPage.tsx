@@ -34,29 +34,20 @@ export const SignUpPage = () => {
         mode: 'onChange',
         defaultValues: { username: '', email: '', password: '' },
     });
-    const [isSubmitted, setIsSubmitted] = useState(false);
     const [isShowAlert, setIsShowAlert] = useState(false);
     const [alertContent, setAlertContent] = useState<string | undefined>();
 
     const onSubmit = async (data: FormSchema) => {
-        if (isSubmitted) {
-            return;
-        }
-        setIsSubmitted(true);
-
         try {
             await API.user.create(data);
 
             navigate('/logIn');
         } catch (error) {
-            setIsShowAlert(true);
-
             if (isAxiosError(error)) {
                 setAlertContent(error.response?.data.message);
             }
+            setIsShowAlert(true);
         }
-
-        setIsSubmitted(false);
     };
 
     return (
