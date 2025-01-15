@@ -3,7 +3,14 @@ import { Navigate, Route, Routes } from 'react-router';
 import { useAuth } from '../../hooks';
 import { HomePage, LogInPage, ProfilePage, SignUpPage, WatchLaterPage } from '../../pages';
 import { NavBar } from '../NavBar';
-import { dividerStyle } from './styles';
+import { ReactNode } from 'react';
+
+const ProtectedRoute = ({ component }: { component: ReactNode }) => {
+    const { user } = useAuth();
+    const isAuthenticated = user !== null;
+
+    return isAuthenticated ? component : <Navigate to="/signUp" />;
+};
 
 export const App = () => {
     const { user } = useAuth();
@@ -14,13 +21,13 @@ export const App = () => {
             {isAuthenticated && (
                 <>
                     <NavBar />
-                    <Divider orientation="vertical" sx={dividerStyle} />
+                    <Divider orientation="vertical" sx={{ height: '100vh', marginX: '1%', borderRightWidth: 2 }} />
                 </>
             )}
             <Routes>
-                <Route path="/" element={isAuthenticated ? <HomePage /> : <Navigate to="/signUp" />} />
-                <Route path="/watchLater" element={<WatchLaterPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/" element={<ProtectedRoute component={<HomePage />} />} />
+                <Route path="/watchLater" element={<ProtectedRoute component={<WatchLaterPage />} />} />
+                <Route path="/profile" element={<ProtectedRoute component={<ProfilePage />} />} />
                 <Route path="/logIn" element={<LogInPage />} />
                 <Route path="/signUp" element={<SignUpPage />} />
             </Routes>

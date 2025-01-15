@@ -30,16 +30,10 @@ export const LogInPage = () => {
         mode: 'onChange',
         defaultValues: { username: '', password: '' },
     });
-    const [isSubmitted, setIsSubmitted] = useState(false);
     const [isShowAlert, setIsShowAlert] = useState(false);
     const [alertContent, setAlertContent] = useState<string | undefined>();
 
     const onSubmit = async ({ username, password }: FormSchema) => {
-        if (isSubmitted) {
-            return;
-        }
-        setIsSubmitted(true);
-
         try {
             const { accessToken, refreshToken, user } = await API.user.logIn(username, password);
             setAccessToken(accessToken);
@@ -48,14 +42,11 @@ export const LogInPage = () => {
 
             navigate('/');
         } catch (error) {
-            setIsShowAlert(true);
-
             if (isAxiosError(error)) {
                 setAlertContent(error.response?.data.message);
             }
+            setIsShowAlert(true);
         }
-
-        setIsSubmitted(false);
     };
 
     return (

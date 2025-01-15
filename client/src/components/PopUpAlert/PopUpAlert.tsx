@@ -14,7 +14,7 @@ export const PopUpAlert = ({ isShowAlert, setIsShowAlert, alertContent, alertSev
     };
 
     return (
-        <Collapse in={isShowAlert}>
+        <Collapse in={isShowAlert} sx={{ margin: 1 }}>
             <Alert {...alertProps}>{alertContent || 'something went wrong'}</Alert>
         </Collapse>
     );
