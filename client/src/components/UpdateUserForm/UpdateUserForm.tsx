@@ -17,22 +17,19 @@ const formSchema = (currentUsername: string, currentEmail: string) =>
             username: z.string().min(3, 'Username must be at least 3 characters long'),
             email: z.string().email('Invalid email address'),
         })
-        .refine((data) => data.username !== currentUsername || data.email !== currentEmail, {
-            message: 'You must update at least one field (username or email)',
-        });
+        .refine((data) => data.username !== currentUsername || data.email !== currentEmail);
 type FormSchema = z.infer<ReturnType<typeof formSchema>>;
 
 export const UpdateUserForm = ({ setIsFormOpen }: UpdateUserFormProps) => {
     const { user, setUser, accessToken } = useAuth();
-    const { email: currentEmail, username: currentUsername } = user || { email: '', username: '' };
     const {
         handleSubmit,
         control,
         formState: { isValid },
     } = useForm<FormSchema>({
-        resolver: zodResolver(formSchema(currentUsername, currentEmail)),
+        resolver: zodResolver(formSchema(user.username, user.email)),
         mode: 'onChange',
-        defaultValues: { username: currentUsername, email: currentEmail },
+        defaultValues: { username: user.username, email: user.email },
     });
     const [isShowAlert, setIsShowAlert] = useState(false);
     const [alertContent, setAlertContent] = useState<string | undefined>();
@@ -40,7 +37,7 @@ export const UpdateUserForm = ({ setIsFormOpen }: UpdateUserFormProps) => {
     const closeDialog = () => setIsFormOpen(false);
     const onSubmit = async (data: FormSchema) => {
         try {
-            const newUser = await API.user.updateUser(currentUsername, data, accessToken || '');
+            const newUser = await API.user.updateUser(user.username, data, accessToken);
             setUser(newUser);
             closeDialog();
         } catch (error) {
