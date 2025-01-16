@@ -6,15 +6,13 @@ import { NavBar } from '../NavBar';
 import { ReactNode } from 'react';
 
 const ProtectedRoute = ({ component }: { component: ReactNode }) => {
-    const { user } = useAuth();
-    const isAuthenticated = user !== null;
+    const { isAuthenticated } = useAuth();
 
     return isAuthenticated ? component : <Navigate to="/signUp" />;
 };
 
 export const App = () => {
-    const { user } = useAuth();
-    const isAuthenticated = user !== null;
+    const { isAuthenticated } = useAuth();
 
     return (
         <Box sx={{ display: 'flex' }}>

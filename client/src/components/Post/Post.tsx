@@ -1,0 +1,55 @@
+import { ChatBubbleOutline, Favorite, FavoriteBorder } from '@mui/icons-material';
+import {
+    Avatar,
+    Box,
+    Card,
+    CardActions,
+    CardContent,
+    CardHeader,
+    CardHeaderProps,
+    CardMedia,
+    Divider,
+    IconButton,
+    Typography,
+} from '@mui/material';
+import logo from '../../assets/logo.png';
+import { useAuth } from '../../hooks';
+import { cardActionBoxStyle } from './styles';
+import { PostProps } from './types';
+
+export const Post = ({ post: { title, content, username, likes, commentsNumber } }: PostProps) => {
+    const { user } = useAuth();
+
+    const cardHeaderProps: CardHeaderProps = {
+        avatar: <Avatar sx={{ height: '50px', width: '50px' }} />,
+        title: username,
+        titleTypographyProps: { variant: 'h4' },
+    };
+
+    return (
+        <Card sx={{ width: '30vw', minHeight: 'fit-content', boxShadow: 3 }}>
+            <CardHeader {...cardHeaderProps} />
+            <Divider />
+            <CardMedia component="img" sx={{ objectFit: 'cover' }} image={logo} />
+            <Divider />
+            <CardContent>
+                <Typography variant="h5">{title}</Typography>
+                <Typography sx={{ color: 'text.secondary' }}>{content}</Typography>
+            </CardContent>
+            <CardActions sx={{ gap: 1 }}>
+                <Box sx={cardActionBoxStyle}>
+                    <IconButton>
+                        {likes.includes(user.username) ? <Favorite color="error" /> : <FavoriteBorder />}
+                    </IconButton>
+                    <Typography>{likes.length}</Typography>
+                </Box>
+                <Box sx={cardActionBoxStyle}>
+                    <IconButton>
+                        <ChatBubbleOutline />
+                    </IconButton>
+                    <Typography>{commentsNumber}</Typography>
+                </Box>
+            </CardActions>
+        </Card>
+    );
+};
