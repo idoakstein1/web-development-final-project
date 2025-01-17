@@ -5,8 +5,6 @@ export const postListContainerStyle: SxProps = {
     flexDirection: 'column',
     alignItems: 'center',
     gap: 2,
-    width: '100%',
-    height: '100vh',
-    overflowY: 'auto',
-    paddingY: 3,
+    paddingTop: 3,
+    paddingRight: 5,
 };
