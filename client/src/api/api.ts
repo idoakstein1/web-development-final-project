@@ -10,6 +10,6 @@ export const API = {
             updateUser(username, user, token),
     },
     post: {
-        getPosts: () => getPosts(),
+        getPosts: (pageNumber: number) => getPosts(pageNumber),
     },
 };

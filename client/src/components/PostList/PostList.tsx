@@ -1,24 +1,47 @@
-import { Box } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Box, Typography } from '@mui/material';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import InfiniteScroll, { Props as InfiniteScrollProps } from 'react-infinite-scroll-component';
 import { API } from '../../api';
-import { Post as PostType } from '../../types';
+import { Loader } from '../Loader';
 import { Post } from '../Post';
 import { postListContainerStyle } from './styles';
 
 export const PostList = () => {
-    const [posts, setPosts] = useState<PostType[]>([]);
+    const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
+        queryKey: ['posts'],
+        queryFn: ({ pageParam }) => API.post.getPosts(pageParam),
+        getNextPageParam: ({ metadata: { hasNext, nextPage } }) => (hasNext ? nextPage : undefined),
+        initialPageParam: 1,
+    });
 
-    useEffect(() => {
-        (async () => {
-            setPosts(await API.post.getPosts());
-        })();
-    }, []);
+    if (isLoading || !data) {
+        return <Loader />;
+    }
+
+    const posts = data.pages.flatMap(({ data }) => data);
+
+    const infiniteScrollProps: Omit<InfiniteScrollProps, 'children'> = {
+        dataLength: posts.length,
+        next: fetchNextPage,
+        hasMore: hasNextPage,
+        loader: <Loader />,
+        endMessage: (
+            <Typography align="center" color="textSecondary" paddingY={2}>
+                No more posts to show
+            </Typography>
+        ),
+        height: '100vh',
+    };
 
     return (
-        <Box sx={postListContainerStyle}>
-            {posts.map((post) => (
-                <Post key={post._id} post={post} />
-            ))}
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <InfiniteScroll {...infiniteScrollProps}>
+                <Box sx={postListContainerStyle}>
+                    {posts.map((post) => (
+                        <Post key={post._id} post={post} />
+                    ))}
+                </Box>
+            </InfiniteScroll>
         </Box>
     );
 };
