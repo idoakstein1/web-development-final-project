@@ -10,14 +10,21 @@ type AuthContextType = {
     refreshToken: string;
     setRefreshToken: (refreshToken: string) => void;
     isAuthenticated: boolean;
+    logOut: () => void;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useLocalStorage<Omit<User, 'password'> | null>('user', null);
-    const [accessToken, setAccessToken] = useLocalStorage<string | null>('accessToken', null);
-    const [refreshToken, setRefreshToken] = useLocalStorage<string | null>('refreshToken', null);
+    const [user, setUser, removeUser] = useLocalStorage<Omit<User, 'password'> | null>('user', null);
+    const [accessToken, setAccessToken, removeAccessToken] = useLocalStorage<string | null>('accessToken', null);
+    const [refreshToken, setRefreshToken, removeRefreshToken] = useLocalStorage<string | null>('refreshToken', null);
+
+    const logOut = () => {
+        removeUser();
+        removeAccessToken();
+        removeRefreshToken();
+    };
 
     return (
         <AuthContext.Provider
@@ -29,6 +36,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 refreshToken: refreshToken || '',
                 setRefreshToken,
                 isAuthenticated: user !== null,
+                logOut,
             }}
         >
             {children}
