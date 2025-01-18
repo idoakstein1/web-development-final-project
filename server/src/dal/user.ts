@@ -1,7 +1,7 @@
 import { ProjectionFields } from 'mongoose';
 import { User, userModel } from '../models/user';
 
-export const createUser = async (user: Omit<User, 'tokens'>) => await userModel.create(user);
+export const createUser = async (user: Omit<User, 'tokens' | 'likes'>) => await userModel.create(user);
 
 export const isUsernameExists = async (username: string) => (await userModel.countDocuments({ username })) > 0;
 
@@ -21,3 +21,5 @@ export const updateUser = async ({
     username: User['username'];
     email: User['email'];
 }) => userModel.findOneAndUpdate({ username: oldUsername }, { username, email }, { new: true });
+
+export const getUserLikesById = async (id: string) => userModel.findById({ _id: id }, { likes: 1 });
