@@ -2,6 +2,7 @@ import request from 'supertest';
 import mongoose from 'mongoose';
 import { Express } from 'express';
 import { postModel, userModel, User } from '../models';
+import { title } from 'process';
 
 let app: Express;
 
@@ -73,6 +74,7 @@ describe('Posts Tests', () => {
                 },
                 externalMovieId: '123',
                 photoUrl: 'https://www.google.com',
+                rate: 3,
             });
         expect(statusCode).toBe(200);
         expect(title).toBe('Test Post');
@@ -92,6 +94,7 @@ describe('Posts Tests', () => {
                 },
                 externalMovieId: '123',
                 photoUrl: 'https://www.google.com',
+                rate: 3,
             });
         expect(statusCode).toBe(400);
     });
@@ -108,6 +111,7 @@ describe('Posts Tests', () => {
                 },
                 externalMovieId: '123',
                 photoUrl: 'https://www.google.com',
+                rate: 3,
             });
         expect(statusCode).toBe(400);
     });
@@ -123,6 +127,7 @@ describe('Posts Tests', () => {
                     username: testUser.username,
                 },
                 externalMovieId: 'fsdfsdf',
+                rate: 3,
             });
         expect(statusCode).toBe(400);
     });
@@ -138,6 +143,7 @@ describe('Posts Tests', () => {
                     username: testUser.username,
                 },
                 photoUrl: 'fsdfsdf',
+                rate: 3,
             });
         expect(statusCode).toBe(400);
     });
@@ -153,6 +159,23 @@ describe('Posts Tests', () => {
                 },
                 photoUrl: 'fsdfsdf',
                 externalMovieId: 'fsdfsd',
+                rate: 3,
+            });
+        expect(statusCode).toBe(400);
+    });
+    test('Test Create Post with missing rate', async () => {
+        const { statusCode } = await request(app)
+            .post('/posts')
+            .set({ authorization: 'bearer ' + userToken })
+            .send({
+                content: 'Test Content',
+                user: {
+                    _id: userId,
+                    username: testUser.username,
+                },
+                photoUrl: 'fsdfsdf',
+                externalMovieId: 'fsdfsd',
+                title: 'Test Title',
             });
         expect(statusCode).toBe(400);
     });
@@ -234,6 +257,7 @@ describe('Posts Tests', () => {
                 },
                 externalMovieId: '123',
                 photoUrl: 'https://www.google.com',
+                rate: 3,
             });
         expect(statusCode).toBe(200);
     });
@@ -262,6 +286,7 @@ describe('Posts Tests', () => {
                 },
                 externalMovieId: '123',
                 photoUrl: 'https://www.google.com',
+                rate: 3,
             });
         await request(app)
             .post('/posts')
@@ -275,6 +300,7 @@ describe('Posts Tests', () => {
                 },
                 externalMovieId: '123',
                 photoUrl: 'https://www.google.com',
+                rate: 3,
             });
 
         const {
