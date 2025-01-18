@@ -1,5 +1,5 @@
 import { User } from '../types';
-import { getPosts } from './post';
+import { getPosts, getUserPosts } from './post';
 import { createUser, logInUser, logOutUser, updateUser } from './user';
 
 export const API = {
@@ -12,5 +12,6 @@ export const API = {
     },
     post: {
         getPosts: (pageNumber: number, token: string) => getPosts(pageNumber, token),
+        getUserPosts: (userId: string, token: string) => getUserPosts(userId, token),
     },
 };

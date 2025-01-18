@@ -1,4 +1,5 @@
 import { Avatar, Box, Divider, Typography } from '@mui/material';
+import { UserPosts } from '../../components/UserPosts';
 import { UserSettings } from '../../components/UserSettings';
 import { useAuth } from '../../hooks';
 
@@ -20,6 +21,7 @@ export const ProfilePage = () => {
                 <UserSettings />
             </Box>
             <Divider orientation="horizontal" sx={{ borderBottomWidth: 2 }} />
+            <UserPosts />
         </Box>
     );
 };

@@ -1,4 +1,4 @@
-import { ChatBubbleOutline, Favorite, FavoriteBorder } from '@mui/icons-material';
+import { ChatBubbleOutline, Favorite, FavoriteBorder, MoreVert } from '@mui/icons-material';
 import {
     Avatar,
     Box,
@@ -13,7 +13,6 @@ import {
     Rating,
     Typography,
 } from '@mui/material';
-import logo from '../../assets/logo.png';
 import { useAuth } from '../../hooks';
 import { cardActionBoxStyle } from './styles';
 import { PostProps } from './types';
@@ -27,7 +26,9 @@ export const Post = ({
         likes,
         commentsNumber,
         rate,
+        photoUrl,
     },
+    showSettings,
 }: PostProps) => {
     const { user } = useAuth();
 
@@ -35,13 +36,18 @@ export const Post = ({
         avatar: <Avatar sx={{ height: '50px', width: '50px' }} />,
         title: username,
         titleTypographyProps: { variant: 'h4' },
+        action: showSettings ? (
+            <IconButton sx={{ marginTop: 1 }}>
+                <MoreVert />
+            </IconButton>
+        ) : undefined,
     };
 
     return (
-        <Card sx={{ width: '30vw', minHeight: 'fit-content', boxShadow: 3 }}>
+        <Card sx={{ width: showSettings ? '100%' : '30vw', minHeight: 'fit-content', boxShadow: 3 }}>
             <CardHeader {...cardHeaderProps} />
             <Divider />
-            <CardMedia component="img" sx={{ objectFit: 'cover' }} image={logo} />
+            <CardMedia component="img" sx={{ objectFit: 'cover' }} image={photoUrl} />
             <Divider />
             <CardContent>
                 <Typography variant="h5">{title}</Typography>
