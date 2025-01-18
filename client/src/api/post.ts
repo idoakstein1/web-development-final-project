@@ -14,3 +14,9 @@ export const getUserPosts = async (userId: string, token: string) =>
             headers: { Authorization: `bearer ${token}` },
         })
     ).data;
+
+export const likePost = async (postId: string, token: string) =>
+    await getAxios().post(`/likes/${postId}`, {}, { headers: { Authorization: `bearer ${token}` } });
+
+export const dislikePost = async (postId: string, token: string) =>
+    await getAxios().delete(`/likes/${postId}`, { headers: { Authorization: `bearer ${token}` } });

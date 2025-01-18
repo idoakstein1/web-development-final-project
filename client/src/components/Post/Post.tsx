@@ -13,6 +13,8 @@ import {
     Rating,
     Typography,
 } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
+import { API } from '../../api';
 import { useAuth } from '../../hooks';
 import { cardActionBoxStyle } from './styles';
 import { PostProps } from './types';
@@ -30,7 +32,15 @@ export const Post = ({
     },
     showSettings,
 }: PostProps) => {
-    const { user } = useAuth();
+    const { user, setUser, accessToken } = useAuth();
+    const queryClient = useQueryClient();
+
+    const hasUserLiked = user.likes.includes(_id);
+    const handleLikeClick = async () => {
+        await API.post[hasUserLiked ? 'dislike' : 'like'](_id, accessToken);
+        setUser({ ...user, likes: hasUserLiked ? user.likes.filter((id) => id !== _id) : [...user.likes, _id] });
+        await queryClient.invalidateQueries({ queryKey: [showSettings ? 'userPosts' : 'posts'] });
+    };
 
     const cardHeaderProps: CardHeaderProps = {
         avatar: <Avatar sx={{ height: '50px', width: '50px' }} />,
@@ -52,12 +62,15 @@ export const Post = ({
             <CardContent>
                 <Typography variant="h5">{title}</Typography>
                 <Typography sx={{ color: 'text.secondary' }}>{content}</Typography>
-                <Rating value={rate} readOnly />
+                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', paddingTop: 2 }}>
+                    <Typography variant="h6">Rating:</Typography>
+                    <Rating value={rate} readOnly />
+                </Box>
             </CardContent>
             <CardActions sx={{ gap: 1 }}>
                 <Box sx={cardActionBoxStyle}>
-                    <IconButton>
-                        {user.likes.includes(_id) ? <Favorite color="error" /> : <FavoriteBorder />}
+                    <IconButton onClick={handleLikeClick}>
+                        {hasUserLiked ? <Favorite color="error" /> : <FavoriteBorder />}
                     </IconButton>
                     <Typography>{likes}</Typography>
                 </Box>
