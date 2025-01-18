@@ -8,10 +8,10 @@ export const postRouter = Router();
 postRouter.post(
     '/',
     asyncHandler(async (req, res) => {
-        const { user, content, title, externalMovieId, photoUrl } = req.body;
-        if (!user || !title || !user.username || !user._id || !externalMovieId || !photoUrl) {
+        const { user, content, title, externalMovieId, photoUrl, rate } = req.body;
+        if (!user || !title || !user.username || !user._id || !externalMovieId || !photoUrl || !rate) {
             res.status(400).send({
-                message: 'body param is missing (user (username, _id), title, externalMovieId, photoUrl)',
+                message: 'body param is missing (user (username, _id), title, externalMovieId, photoUrl, rate)',
             });
             return;
         }
@@ -36,6 +36,7 @@ postRouter.post(
                 content,
                 externalMovieId,
                 photoUrl,
+                rate,
             },
         });
         res.status(200).send(post);
@@ -72,7 +73,7 @@ postRouter.put(
         }
         const post = await getPostById(id);
 
-        const { content, title, photoUrl } = req.body;
+        const { content, title, photoUrl, rate } = req.body;
 
         const userId = res.locals.user._id;
 
@@ -81,7 +82,7 @@ postRouter.put(
             return;
         }
 
-        if (!content && !title && !photoUrl) {
+        if (!content && !title && !photoUrl && !rate) {
             res.status(400).send({ message: 'no data to update' });
             return;
         }
@@ -92,6 +93,7 @@ postRouter.put(
                 content,
                 title,
                 photoUrl,
+                rate,
             },
         });
 
@@ -132,10 +134,9 @@ postRouter.get(
     '/',
     asyncHandler(async (req, res) => {
         const page = parseInt(req.query.page as string) || 1;
-        const limit = parseInt(req.query.limit as string) || 10;
+        const limit = parseInt(req.query.limit as string) || 5;
 
-        const posts = await getPosts({ page, limit });
-        res.status(200).send({ posts });
+        res.status(200).send(await getPosts({ page, limit }));
     })
 );
 

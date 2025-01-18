@@ -2,7 +2,6 @@ import request from 'supertest';
 import mongoose from 'mongoose';
 import { Express } from 'express';
 import { User, userModel } from '../models';
-import { hashPassword } from '../helperFunctions';
 import { compare } from 'bcrypt';
 
 let app: Express;
@@ -13,6 +12,7 @@ let testUser: User & { _id: string } = {
     password: 'testpassword',
     _id: '',
     tokens: [],
+    likes: [],
 };
 let accessToken: string;
 

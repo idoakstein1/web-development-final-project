@@ -3,7 +3,7 @@ import cors from 'cors';
 import { config } from 'dotenv';
 import Express, { NextFunction, Request, Response } from 'express';
 import { authenticate, errorHandler } from '../middlewares';
-import { authRouter, postRouter, userRouter } from '../router';
+import { authRouter, likeRouter, postRouter, userRouter } from '../router';
 import { getConfig, initDBConnection } from '../services';
 
 config();
@@ -21,6 +21,7 @@ export const initApp = async () => {
     app.use(authenticate);
     app.use('/users', userRouter);
     app.use('/posts', postRouter);
+    app.use('/likes', likeRouter);
 
     app.use(errorHandler);
 

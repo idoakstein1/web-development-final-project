@@ -10,6 +10,7 @@ import {
     CardMedia,
     Divider,
     IconButton,
+    Rating,
     Typography,
 } from '@mui/material';
 import logo from '../../assets/logo.png';
@@ -17,7 +18,17 @@ import { useAuth } from '../../hooks';
 import { cardActionBoxStyle } from './styles';
 import { PostProps } from './types';
 
-export const Post = ({ post: { title, content, username, likes, commentsNumber } }: PostProps) => {
+export const Post = ({
+    post: {
+        _id,
+        title,
+        content,
+        user: { username },
+        likes,
+        commentsNumber,
+        rate,
+    },
+}: PostProps) => {
     const { user } = useAuth();
 
     const cardHeaderProps: CardHeaderProps = {
@@ -35,13 +46,14 @@ export const Post = ({ post: { title, content, username, likes, commentsNumber }
             <CardContent>
                 <Typography variant="h5">{title}</Typography>
                 <Typography sx={{ color: 'text.secondary' }}>{content}</Typography>
+                <Rating value={rate} readOnly />
             </CardContent>
             <CardActions sx={{ gap: 1 }}>
                 <Box sx={cardActionBoxStyle}>
                     <IconButton>
-                        {likes.includes(user.username) ? <Favorite color="error" /> : <FavoriteBorder />}
+                        {user.likes.includes(_id) ? <Favorite color="error" /> : <FavoriteBorder />}
                     </IconButton>
-                    <Typography>{likes.length}</Typography>
+                    <Typography>{likes}</Typography>
                 </Box>
                 <Box sx={cardActionBoxStyle}>
                     <IconButton>
