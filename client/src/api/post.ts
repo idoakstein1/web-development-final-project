@@ -20,3 +20,8 @@ export const likePost = async (postId: string, token: string) =>
 
 export const dislikePost = async (postId: string, token: string) =>
     await getAxios().delete(`/likes/${postId}`, { headers: { Authorization: `bearer ${token}` } });
+
+export const createPost = async (
+    post: Pick<Post, 'user' | 'content' | 'title' | 'externalMovieId' | 'photoUrl' | 'rate'>,
+    token: string
+) => await getAxios().post('/posts', post, { headers: { Authorization: `bearer ${token}` } });

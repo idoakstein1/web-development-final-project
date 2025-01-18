@@ -28,7 +28,7 @@ export const PostList = () => {
         hasMore: hasNextPage,
         loader: <Loader />,
         endMessage: (
-            <Typography align="center" color="textSecondary" paddingY={2}>
+            <Typography align="center" color="textSecondary" paddingY={2} paddingRight={25}>
                 No more posts to show
             </Typography>
         ),

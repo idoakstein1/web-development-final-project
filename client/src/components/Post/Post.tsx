@@ -39,7 +39,7 @@ export const Post = ({
     const handleLikeClick = async () => {
         await API.post[hasUserLiked ? 'dislike' : 'like'](_id, accessToken);
         setUser({ ...user, likes: hasUserLiked ? user.likes.filter((id) => id !== _id) : [...user.likes, _id] });
-        await queryClient.invalidateQueries({ queryKey: [showSettings ? 'userPosts' : 'posts'] });
+        queryClient.invalidateQueries({ queryKey: [showSettings ? 'userPosts' : 'posts'] });
     };
 
     const cardHeaderProps: CardHeaderProps = {

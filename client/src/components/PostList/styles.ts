@@ -6,5 +6,5 @@ export const postListContainerStyle: SxProps = {
     alignItems: 'center',
     gap: 2,
     paddingTop: 3,
-    paddingRight: 5,
+    paddingRight: 25,
 };
