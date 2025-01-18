@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { API } from '../../api';
 import { useAuth } from '../../hooks';
-import { Post as PostType } from '../../types';
 import { Loader } from '../Loader';
 import { Post } from '../Post';
 
@@ -14,11 +13,13 @@ export const UserPosts = () => {
         queryFn: () => API.post.getUserPosts(user._id, accessToken),
     });
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [selectedPost, setSelectedPost] = useState<PostType | null>(null);
+    const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
     if (isLoading || !data) {
         return <Loader />;
     }
+
+    const selectedPost = data.posts.find(({ _id }) => _id === selectedPostId);
 
     return data.posts.length === 0 ? (
         <Typography align="center" color="textSecondary" paddingY={2}>
@@ -28,15 +29,15 @@ export const UserPosts = () => {
         <>
             <Box sx={{ paddingRight: 2, height: '75vh', overflowY: 'auto' }}>
                 <ImageList variant="masonry" cols={3}>
-                    {data.posts.map((post) => (
+                    {data.posts.map(({ _id, photoUrl }) => (
                         <ImageListItem
-                            key={post._id}
+                            key={_id}
                             onClick={() => {
                                 setIsDialogOpen(true);
-                                setSelectedPost(post);
+                                setSelectedPostId(_id);
                             }}
                         >
-                            <Box component="img" width="25vw" src={`${post.photoUrl}?fit=crop&auto=format`} />
+                            <Box component="img" width="25vw" src={`${photoUrl}?fit=crop&auto=format`} />
                         </ImageListItem>
                     ))}
                 </ImageList>
