@@ -7,3 +7,10 @@ export const getPosts = async (pageNumber: number, token: string) =>
             headers: { Authorization: `bearer ${token}` },
         })
     ).data;
+
+export const getUserPosts = async (userId: string, token: string) =>
+    (
+        await getAxios().get<{ posts: Post[] }>(`/posts/users/${userId}`, {
+            headers: { Authorization: `bearer ${token}` },
+        })
+    ).data;
