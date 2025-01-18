@@ -1,1 +1,3 @@
-export const WatchLaterPage = () => <h1>Watch Later</h1>;
+import { MovieList } from '../../components/MovieList';
+
+export const WatchLaterPage = () => <MovieList />;
