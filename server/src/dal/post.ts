@@ -10,7 +10,7 @@ export const editPost = async ({
     dataToUpdate,
 }: {
     postId: string;
-    dataToUpdate: Partial<Pick<Post, 'content' | 'photoUrl' | 'title'>>;
+    dataToUpdate: Partial<Pick<Post, 'content' | 'photoUrl' | 'title' | 'rate'>>;
 }) => await postModel.updateOne({ _id: postId }, { ...dataToUpdate, updatedAt: Date.now() });
 
 export const deletePost = async (postId: string) => await postModel.deleteOne({ _id: postId });

@@ -12,6 +12,7 @@ const postSchema = new Schema({
     likes: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
+    rate: { type: Number, default: 0, min: 0, max: 5, required: true },
 });
 
 export const postModel = model('posts', postSchema);
