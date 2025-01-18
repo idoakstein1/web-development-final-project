@@ -20,3 +20,6 @@ export const likePost = async (postId: string, token: string) =>
 
 export const dislikePost = async (postId: string, token: string) =>
     await getAxios().delete(`/likes/${postId}`, { headers: { Authorization: `bearer ${token}` } });
+
+export const deletePost = async (postId: string, token: string) =>
+    await getAxios().delete(`/posts/${postId}`, { headers: { Authorization: `bearer ${token}` } });

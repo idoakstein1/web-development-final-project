@@ -1,5 +1,5 @@
 import { User } from '../types';
-import { dislikePost, getPosts, getUserPosts, likePost } from './post';
+import { deletePost, dislikePost, getPosts, getUserPosts, likePost } from './post';
 import { createUser, logInUser, logOutUser, updateUser } from './user';
 
 export const API = {
@@ -15,5 +15,6 @@ export const API = {
         getUserPosts: (userId: string, token: string) => getUserPosts(userId, token),
         like: (postId: string, token: string) => likePost(postId, token),
         dislike: (postId: string, token: string) => dislikePost(postId, token),
+        delete: (postId: string, token: string) => deletePost(postId, token),
     },
 };

@@ -19,6 +19,14 @@ export const UserPosts = () => {
         return <Loader />;
     }
 
+    const handlePostClick = (postId: string) => () => {
+        setIsDialogOpen(true);
+        setSelectedPostId(postId);
+    };
+    const onDialogClose = () => {
+        setIsDialogOpen(false);
+        setSelectedPostId(null);
+    };
     const selectedPost = data.posts.find(({ _id }) => _id === selectedPostId);
 
     return data.posts.length === 0 ? (
@@ -30,20 +38,14 @@ export const UserPosts = () => {
             <Box sx={{ paddingRight: 2, height: '75vh', overflowY: 'auto' }}>
                 <ImageList variant="masonry" cols={3}>
                     {data.posts.map(({ _id, photoUrl }) => (
-                        <ImageListItem
-                            key={_id}
-                            onClick={() => {
-                                setIsDialogOpen(true);
-                                setSelectedPostId(_id);
-                            }}
-                        >
+                        <ImageListItem key={_id} onClick={handlePostClick(_id)}>
                             <Box component="img" width="25vw" src={`${photoUrl}?fit=crop&auto=format`} />
                         </ImageListItem>
                     ))}
                 </ImageList>
             </Box>
-            <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} fullWidth>
-                {selectedPost && <Post post={selectedPost} showSettings />}
+            <Dialog open={isDialogOpen} onClose={onDialogClose} fullWidth>
+                {selectedPost && <Post post={selectedPost} showSettings onDelete={onDialogClose} />}
             </Dialog>
         </>
     );
