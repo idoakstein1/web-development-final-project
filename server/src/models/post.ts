@@ -1,11 +1,13 @@
 import { InferSchemaType, Schema, model } from 'mongoose';
 
+const userSchema = new Schema({
+    _id: { type: Schema.Types.ObjectId, ref: 'users', required: true },
+    username: { type: String, required: true },
+});
+
 const postSchema = new Schema({
     title: { type: String, required: true },
-    user: {
-        _id: { type: Schema.Types.ObjectId, ref: 'users', required: true },
-        username: { type: String, required: true },
-    },
+    user: { type: userSchema, required: true },
     content: { type: String, required: true },
     externalMovieId: { type: String, required: true },
     photoUrl: { type: String, required: true },

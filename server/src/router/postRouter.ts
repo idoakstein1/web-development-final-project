@@ -134,10 +134,9 @@ postRouter.get(
     '/',
     asyncHandler(async (req, res) => {
         const page = parseInt(req.query.page as string) || 1;
-        const limit = parseInt(req.query.limit as string) || 10;
+        const limit = parseInt(req.query.limit as string) || 5;
 
-        const posts = await getPosts({ page, limit });
-        res.status(200).send({ posts });
+        res.status(200).send(await getPosts({ page, limit }));
     })
 );
 
