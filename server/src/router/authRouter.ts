@@ -29,7 +29,7 @@ authRouter.post(
         res.status(200).send({
             accessToken,
             refreshToken,
-            user: { _id: user._id.toString(), username: user.username, email: user.email },
+            user: { _id: user._id.toString(), username: user.username, email: user.email, likes: user.likes },
         });
     })
 );
