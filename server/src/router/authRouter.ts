@@ -26,7 +26,11 @@ authRouter.post(
         user.tokens.push(refreshToken);
         await user.save();
 
-        res.status(200).send({ accessToken, refreshToken, user: { username: user.username, email: user.email } });
+        res.status(200).send({
+            accessToken,
+            refreshToken,
+            user: { _id: user._id.toString(), username: user.username, email: user.email },
+        });
     })
 );
 
