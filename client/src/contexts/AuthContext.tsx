@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import { User } from '../types';
+import { API } from '../api';
 
 type AuthContextType = {
     user: Omit<User, 'password'>;
@@ -20,10 +21,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [accessToken, setAccessToken, removeAccessToken] = useLocalStorage<string | null>('accessToken', null);
     const [refreshToken, setRefreshToken, removeRefreshToken] = useLocalStorage<string | null>('refreshToken', null);
 
-    const logOut = () => {
+    const logOut = async () => {
         removeUser();
         removeAccessToken();
         removeRefreshToken();
+        await API.user.logOut(refreshToken || '');
     };
 
     return (

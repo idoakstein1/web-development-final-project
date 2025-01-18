@@ -16,12 +16,16 @@ export const editPost = async ({
 export const deletePost = async (postId: string) => await postModel.deleteOne({ _id: postId });
 
 export const getPosts = async ({ page, limit }: { page: number; limit: number }) => {
-    return await postModel
+    const posts = await postModel
         .find()
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
         .limit(limit)
         .select('-__v');
+
+    const totalPages = Math.ceil((await postModel.countDocuments()) / limit);
+
+    return { posts, metadata: { hasNext: page < totalPages, nextPage: page < totalPages ? page + 1 : null } };
 };
 
 export const getPostsByUserId = async (userId: string) => {

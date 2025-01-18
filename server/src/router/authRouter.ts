@@ -15,7 +15,7 @@ authRouter.post(
             return;
         }
 
-        const user = await findUserByUsername(username, { password: 1, tokens: 1, email: 1, username: 1 });
+        const user = await findUserByUsername(username, { password: 1, tokens: 1, email: 1, username: 1, likes: 1 });
         if (!user || !(await compare(password, user.password))) {
             res.status(400).send({ message: 'username or password is incorrect' });
             return;
