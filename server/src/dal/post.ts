@@ -1,7 +1,10 @@
 import { Post, postModel } from '../models';
 
-export const createPost = async ({ post }: { post: Omit<Post, 'likes' | 'createdAt' | 'updatedAt'> }) =>
-    await postModel.create(post);
+export const createPost = async ({
+    post,
+}: {
+    post: Omit<Post, 'likes' | 'createdAt' | 'updatedAt' | 'commentsCount'>;
+}) => await postModel.create(post);
 
 export const getPostById = async (id: string) => await postModel.findById(id).select('-__v');
 
