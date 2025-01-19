@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useAPI, useAuth } from '../../hooks';
 import { Loader } from '../Loader';
 import { Post } from '../Post';
+import { PostForm } from '../PostForm';
 
 export const UserPosts = () => {
     const API = useAPI();
@@ -14,6 +15,7 @@ export const UserPosts = () => {
     });
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+    const [isInEditMode, setIsInEditMode] = useState(false);
 
     if (isLoading || !data) {
         return <Loader />;
@@ -45,7 +47,23 @@ export const UserPosts = () => {
                 </ImageList>
             </Box>
             <Dialog open={isDialogOpen} onClose={onDialogClose} fullWidth>
-                {selectedPost && <Post post={selectedPost} showSettings onDelete={onDialogClose} />}
+                {selectedPost &&
+                    (isInEditMode ? (
+                        <PostForm
+                            post={selectedPost}
+                            onSubmit={() => {
+                                setIsInEditMode(false);
+                                onDialogClose();
+                            }}
+                        />
+                    ) : (
+                        <Post
+                            post={selectedPost}
+                            showSettings
+                            onDelete={onDialogClose}
+                            onEdit={() => setIsInEditMode(true)}
+                        />
+                    ))}
             </Dialog>
         </>
     );

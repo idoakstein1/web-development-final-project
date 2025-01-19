@@ -29,6 +29,10 @@ export const useAPI = () => {
             delete: async (postId: string) => await apiClient.delete(`/posts/${postId}`),
             create: async (post: Pick<Post, 'user' | 'content' | 'title' | 'externalMovieId' | 'photoUrl' | 'rate'>) =>
                 await apiClient.post('/posts', post),
+            update: async (
+                postId: string,
+                post: Partial<Pick<Post, 'content' | 'title' | 'externalMovieId' | 'photoUrl' | 'rate'>>
+            ) => await apiClient.put(`/posts/${postId}`, post),
         },
     };
 };

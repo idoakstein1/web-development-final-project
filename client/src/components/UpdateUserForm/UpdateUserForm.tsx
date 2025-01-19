@@ -16,7 +16,7 @@ const formSchema = (currentUsername: string, currentEmail: string) =>
             username: z.string().min(3, 'Username must be at least 3 characters long'),
             email: z.string().email('Invalid email address'),
         })
-        .refine((data) => data.username !== currentUsername || data.email !== currentEmail);
+        .refine(({ username, email }) => username !== currentUsername || email !== currentEmail);
 type FormSchema = z.infer<ReturnType<typeof formSchema>>;
 
 export const UpdateUserForm = ({ setIsFormOpen }: UpdateUserFormProps) => {

@@ -1,11 +1,11 @@
-import { Delete, MoreVert } from '@mui/icons-material';
+import { Delete, Edit, MoreVert } from '@mui/icons-material';
 import { IconButton, List, ListItemButton, Popover, PopoverProps } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useAPI } from '../../hooks';
 import { PostOptionsProps } from './types';
 
-export const PostOptions = ({ postId, onDelete }: PostOptionsProps) => {
+export const PostOptions = ({ postId, onDelete, onEdit }: PostOptionsProps) => {
     const API = useAPI();
     const queryClient = useQueryClient();
     const [anchorElement, setAnchorElement] = useState<HTMLButtonElement | null>(null);
@@ -31,7 +31,9 @@ export const PostOptions = ({ postId, onDelete }: PostOptionsProps) => {
             </IconButton>
             <Popover {...popoverProps}>
                 <List>
-                    <ListItemButton>Edit Post</ListItemButton>
+                    <ListItemButton onClick={onEdit} sx={{ gap: '10px' }}>
+                        <Edit /> Edit Post
+                    </ListItemButton>
                     <ListItemButton onClick={deletePost} sx={{ gap: '10px', color: 'red' }}>
                         <Delete /> Delete Post
                     </ListItemButton>
