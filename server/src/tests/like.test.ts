@@ -12,7 +12,7 @@ let testUser: Partial<User> = {
     password: 'testpassword',
 };
 
-let testPost: Post = {
+let testPost: Omit<Post, 'user'> = {
     likes: 0,
     title: 'Test post',
     createdAt: new Date(),

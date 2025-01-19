@@ -15,9 +15,11 @@ export const editPost = async ({
 
 export const deletePost = async (postId: string) => await postModel.deleteOne({ _id: postId });
 
-export const getPosts = async ({ page, limit }: { page: number; limit: number }) => {
+export const getPosts = async ({ userId, page, limit }: { userId: string; page: number; limit: number }) => {
     const posts = await postModel
         .find()
+        .where('user._id')
+        .ne(userId)
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
         .limit(limit)
