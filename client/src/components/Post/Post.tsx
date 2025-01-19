@@ -32,7 +32,8 @@ export const Post = ({
         photoUrl,
     },
     showSettings,
-    onDelete,
+    onDelete = () => {},
+    onEdit = () => {},
 }: PostProps) => {
     const API = useAPI();
     const { user, setUser } = useAuth();
@@ -49,7 +50,7 @@ export const Post = ({
         avatar: <Avatar sx={{ height: '50px', width: '50px' }} />,
         title: username,
         titleTypographyProps: { variant: 'h4' },
-        action: showSettings ? <PostOptions postId={_id} onDelete={onDelete || (() => {})} /> : undefined,
+        action: showSettings ? <PostOptions postId={_id} onDelete={onDelete} onEdit={onEdit} /> : undefined,
     };
 
     return (
