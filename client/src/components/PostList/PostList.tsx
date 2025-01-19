@@ -1,17 +1,16 @@
 import { Box, Typography } from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import InfiniteScroll, { Props as InfiniteScrollProps } from 'react-infinite-scroll-component';
-import { API } from '../../api';
-import { useAuth } from '../../hooks';
+import { useAPI } from '../../hooks';
 import { Loader } from '../Loader';
 import { Post } from '../Post';
 import { postListContainerStyle } from './styles';
 
 export const PostList = () => {
-    const { accessToken } = useAuth();
+    const API = useAPI();
     const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
         queryKey: ['posts'],
-        queryFn: ({ pageParam }) => API.post.getPosts(pageParam, accessToken),
+        queryFn: ({ pageParam }) => API.post.getPosts(pageParam),
         getNextPageParam: ({ metadata: { hasNext, nextPage } }) => (hasNext ? nextPage : undefined),
         initialPageParam: 1,
     });

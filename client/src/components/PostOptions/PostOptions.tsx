@@ -2,12 +2,11 @@ import { Delete, MoreVert } from '@mui/icons-material';
 import { IconButton, List, ListItemButton, Popover, PopoverProps } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { API } from '../../api';
-import { useAuth } from '../../hooks';
+import { useAPI } from '../../hooks';
 import { PostOptionsProps } from './types';
 
 export const PostOptions = ({ postId, onDelete }: PostOptionsProps) => {
-    const { accessToken } = useAuth();
+    const API = useAPI();
     const queryClient = useQueryClient();
     const [anchorElement, setAnchorElement] = useState<HTMLButtonElement | null>(null);
 
@@ -20,7 +19,7 @@ export const PostOptions = ({ postId, onDelete }: PostOptionsProps) => {
     };
 
     const deletePost = async () => {
-        await API.post.delete(postId, accessToken);
+        await API.post.delete(postId);
         await queryClient.invalidateQueries({ queryKey: ['userPosts'] });
         onDelete();
     };

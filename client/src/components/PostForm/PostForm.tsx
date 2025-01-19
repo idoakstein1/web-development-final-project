@@ -4,8 +4,7 @@ import { Box, IconButton, Typography } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { API } from '../../api';
-import { useAuth } from '../../hooks';
+import { useAPI, useAuth } from '../../hooks';
 import { FormRatingField, FormTextField } from '../fields';
 
 const formSchema = z.object({
@@ -20,7 +19,8 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 export const PostForm = () => {
-    const { user, accessToken } = useAuth();
+    const API = useAPI();
+    const { user } = useAuth();
     const queryClient = useQueryClient();
     const {
         handleSubmit,
@@ -36,15 +36,12 @@ export const PostForm = () => {
     const onSubmit = async (data: FormSchema) => {
         const { _id, username } = user;
 
-        await API.post.create(
-            {
-                ...data,
-                user: { _id, username },
-                photoUrl:
-                    'https://images-cdn.ubuy.co.in/6352289f38bb253c44612d53-interstellar-movie-poster-24-x-36-inches.jpg',
-            },
-            accessToken
-        );
+        await API.post.create({
+            ...data,
+            user: { _id, username },
+            photoUrl:
+                'https://images-cdn.ubuy.co.in/6352289f38bb253c44612d53-interstellar-movie-poster-24-x-36-inches.jpg',
+        });
         queryClient.invalidateQueries({ queryKey: ['posts'] });
         reset();
     };

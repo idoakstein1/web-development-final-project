@@ -1,16 +1,16 @@
 import { Box, Dialog, ImageList, ImageListItem, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { API } from '../../api';
-import { useAuth } from '../../hooks';
+import { useAPI, useAuth } from '../../hooks';
 import { Loader } from '../Loader';
 import { Post } from '../Post';
 
 export const UserPosts = () => {
-    const { user, accessToken } = useAuth();
+    const API = useAPI();
+    const { user } = useAuth();
     const { data, isLoading } = useQuery({
         queryKey: ['userPosts'],
-        queryFn: () => API.post.getUserPosts(user._id, accessToken),
+        queryFn: () => API.post.getUserPosts(user._id),
     });
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
