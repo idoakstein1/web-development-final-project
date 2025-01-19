@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { isValidObjectId } from 'mongoose';
-import { getPostById, getUserById } from '../dal';
+import { getCommentsByPostId, getPostById, getUserById } from '../dal';
 import { createComment } from '../bl';
 import { asyncHandler } from '../errors/asyncHandler';
 
@@ -23,5 +23,20 @@ commentRouter.post(
         await createComment({ user, content, postId });
 
         res.status(200).send({ user, content, postId });
+    })
+);
+
+commentRouter.get(
+    '/post/:postId',
+    asyncHandler(async (req, res) => {
+        const { postId } = req.params;
+        if (!isValidObjectId(postId) || (await getPostById(postId)) === null) {
+            res.status(400).send({ message: `post with id: ${postId} doesn't exists` });
+            return;
+        }
+
+        const comments = await getCommentsByPostId(postId);
+
+        res.status(200).send({ comments });
     })
 );
