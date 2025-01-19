@@ -43,14 +43,9 @@ export const useApiClient = () => {
                         await axiosInstance.post<Omit<LogInInfo, 'user'>>('/auth/refresh', { refreshToken })
                     ).data;
 
-                    console.log('Token refreshed:', newAccessToken);
-
                     setAccessToken(newAccessToken);
                     setRefreshToken(newRefreshToken);
 
-                    // originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-
-                    // return axiosInstance(originalRequest);
                     return;
                 } catch (refreshError) {
                     console.error('Error refreshing token:', refreshError);
