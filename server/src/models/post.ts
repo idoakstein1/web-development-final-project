@@ -1,6 +1,6 @@
 import { InferSchemaType, Schema, model } from 'mongoose';
 
-const userSchema = new Schema({
+export const userSchema = new Schema({
     _id: { type: Schema.Types.ObjectId, ref: 'users', required: true },
     username: { type: String, required: true },
 });
@@ -15,6 +15,7 @@ const postSchema = new Schema({
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
     rate: { type: Number, default: 0, min: 0, max: 5, required: true },
+    commentsCount: { type: Number, default: 0 },
 });
 
 export const postModel = model('posts', postSchema);

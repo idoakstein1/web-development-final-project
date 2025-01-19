@@ -15,6 +15,9 @@ let testUser: Partial<User> = {
 let userId: string;
 let userToken: string;
 
+let userId2: string;
+let userToken2: string;
+
 beforeAll(async () => {
     app = await global.initTestServer();
     await userModel.deleteMany();
@@ -262,60 +265,96 @@ describe('Posts Tests', () => {
         expect(statusCode).toBe(200);
     });
 
-    test('Posts test get all 2', async () => {
+    test('Posts test get all 2 - my posts', async () => {
         const {
             statusCode,
             body: { posts },
         } = await request(app)
             .get('/posts')
             .set({ authorization: 'bearer ' + userToken });
+        expect(statusCode).toBe(200);
+        expect(posts.length).toBe(0);
+    });
+
+    test('Posts test get 2 - other posts', async () => {
+        await request(app).post('/users').send({ username: 'testuser2', email: 'fsdf@fdsf', password: '123' });
+        const res = await request(app).post('/auth/login').send({ username: 'testuser2', password: '123' });
+
+        userId2 = res.body.user._id;
+        userToken2 = res.body.accessToken;
+
+        await request(app)
+            .post('/posts')
+            .set({ authorization: 'bearer ' + userToken2 })
+            .send({
+                title: 'Test Post',
+                content: 'Test Content1',
+                user: {
+                    _id: userId2,
+                    username: 'testuser2',
+                },
+                externalMovieId: '123',
+                photoUrl: 'https://www.google.com',
+                rate: 3,
+            });
+
+        await request(app)
+            .post('/posts')
+            .set({ authorization: 'bearer ' + userToken2 })
+            .send({
+                title: 'Test Post2',
+                content: 'Test Content2',
+                user: {
+                    _id: userId2,
+                    username: 'testuser2',
+                },
+                externalMovieId: '123',
+                photoUrl: 'https://www.google.com',
+                rate: 3,
+            });
+
+        const {
+            statusCode,
+            body: { posts },
+        } = await request(app)
+            .get('/posts')
+            .set({ authorization: 'bearer ' + userToken });
+
         expect(statusCode).toBe(200);
         expect(posts.length).toBe(2);
     });
 
-    test('Posts test get 4 with limit', async () => {
+    test('Posts test get 2 with paging', async () => {
         await request(app)
             .post('/posts')
-            .set({ authorization: 'bearer ' + userToken })
+            .set({ authorization: 'bearer ' + userToken2 })
             .send({
                 title: 'Test Post3',
-                content: 'Test Content1',
+                content: 'Test Content3',
                 user: {
-                    _id: userId,
-                    username: testUser.username,
+                    _id: userId2,
+                    username: 'testuser2',
                 },
                 externalMovieId: '123',
                 photoUrl: 'https://www.google.com',
                 rate: 3,
             });
+
         await request(app)
             .post('/posts')
-            .set({ authorization: 'bearer ' + userToken })
+            .set({ authorization: 'bearer ' + userToken2 })
             .send({
                 title: 'Test Post4',
-                content: 'Test Content1',
+                content: 'Test Content4',
                 user: {
-                    _id: userId,
-                    username: testUser.username,
+                    _id: userId2,
+                    username: 'testuser2',
                 },
                 externalMovieId: '123',
                 photoUrl: 'https://www.google.com',
                 rate: 3,
             });
 
-        const {
-            statusCode,
-            body: { posts },
-        } = await request(app)
-            .get('/posts')
-            .query({ limit: 4, page: 1 })
-            .set({ authorization: 'bearer ' + userToken });
-
-        expect(statusCode).toBe(200);
-        expect(posts.length).toBe(4);
-    });
-
-    test('Posts test get 2 with paging', async () => {
         const {
             statusCode,
             body: { posts },
@@ -339,7 +378,7 @@ describe('Posts Tests', () => {
             .get(`/posts/users/${userId}`)
             .set({ authorization: 'bearer ' + userToken });
         expect(statusCode).toBe(200);
-        expect(posts.length).toBe(4);
+        expect(posts.length).toBe(2);
     });
     test('Posts get by user id invalid userId', async () => {
         const { statusCode } = await request(app)

@@ -136,7 +136,9 @@ postRouter.get(
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 5;
 
-        res.status(200).send(await getPosts({ page, limit }));
+        const userId = res.locals.user._id;
+
+        res.status(200).send(await getPosts({ userId, page, limit }));
     })
 );
 

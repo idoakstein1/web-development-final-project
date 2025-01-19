@@ -46,7 +46,7 @@ describe('Auth Tests', () => {
         const user = response.body.user;
         expect(accessToken).toBeDefined();
         expect(refreshToken).toBeDefined();
-        expect(user).toEqual({ username: testUser.username, email: testUser.email, _id: testUserId });
+        expect(user).toEqual({ username: testUser.username, email: testUser.email, _id: testUserId, likes: [] });
         testUser.accessToken = accessToken;
         testUser.refreshToken = refreshToken;
     });
