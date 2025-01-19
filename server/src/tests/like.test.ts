@@ -21,6 +21,7 @@ let testPost: Omit<Post, 'user'> = {
     externalMovieId: '123',
     photoUrl: '123',
     content: 'Test content',
+    commentsCount: 0,
 };
 
 let userId: string;

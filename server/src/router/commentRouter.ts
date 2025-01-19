@@ -15,6 +15,11 @@ commentRouter.post(
             return;
         }
 
+        if (!isValidObjectId(postId)) {
+            res.status(400).send({ message: `postId is invalid` });
+            return;
+        }
+
         if (!isValidObjectId(user._id) || (await getUserById(user._id)) === null) {
             res.status(400).send({ message: `sender with id: ${user._id} doesn't exists` });
             return;
