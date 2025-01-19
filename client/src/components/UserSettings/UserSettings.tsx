@@ -1,11 +1,12 @@
 import { Logout, MoreVert } from '@mui/icons-material';
 import { IconButton, List, ListItemButton, Popover, PopoverProps } from '@mui/material';
 import { useState } from 'react';
-import { useAuth } from '../../hooks';
+import { useAPI, useAuth } from '../../hooks';
 import { UpdateUserForm } from '../UpdateUserForm';
 
 export const UserSettings = () => {
-    const { logOut } = useAuth();
+    const API = useAPI();
+    const { refreshToken } = useAuth();
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [anchorElement, setAnchorElement] = useState<HTMLButtonElement | null>(null);
 
@@ -25,7 +26,7 @@ export const UserSettings = () => {
             <Popover {...popoverProps}>
                 <List>
                     <ListItemButton onClick={() => setIsFormOpen(true)}>Edit Profile</ListItemButton>
-                    <ListItemButton onClick={logOut} sx={{ gap: '10px' }}>
+                    <ListItemButton onClick={() => API.user.logOut(refreshToken)} sx={{ gap: '10px' }}>
                         Log Out <Logout />
                     </ListItemButton>
                 </List>

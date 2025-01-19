@@ -1,7 +1,6 @@
 import { createContext } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import { User } from '../types';
-import { API } from '../api';
 
 type AuthContextType = {
     user: Omit<User, 'password'>;
@@ -25,7 +24,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         removeUser();
         removeAccessToken();
         removeRefreshToken();
-        await API.user.logOut(refreshToken || '');
     };
 
     return (

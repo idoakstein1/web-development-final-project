@@ -4,8 +4,7 @@ import { isAxiosError } from 'axios';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { API } from '../../api';
-import { useAuth } from '../../hooks';
+import { useAPI, useAuth } from '../../hooks';
 import { FormTextField } from '../fields';
 import { PopUpAlert } from '../PopUpAlert';
 import { dialogContentStyle } from './styles';
@@ -21,7 +20,8 @@ const formSchema = (currentUsername: string, currentEmail: string) =>
 type FormSchema = z.infer<ReturnType<typeof formSchema>>;
 
 export const UpdateUserForm = ({ setIsFormOpen }: UpdateUserFormProps) => {
-    const { user, setUser, accessToken } = useAuth();
+    const API = useAPI();
+    const { user, setUser } = useAuth();
     const {
         handleSubmit,
         control,
@@ -37,7 +37,7 @@ export const UpdateUserForm = ({ setIsFormOpen }: UpdateUserFormProps) => {
     const closeDialog = () => setIsFormOpen(false);
     const onSubmit = async (data: FormSchema) => {
         try {
-            const newUser = await API.user.updateUser(user.username, data, accessToken);
+            const newUser = await API.user.updateUser(user.username, data);
             setUser(newUser);
             closeDialog();
         } catch (error) {

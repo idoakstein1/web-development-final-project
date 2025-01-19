@@ -5,10 +5,9 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router';
 import { z } from 'zod';
-import { API } from '../../api';
 import { FormTextField, PasswordField } from '../../components/fields';
 import { PopUpAlert } from '../../components/PopUpAlert';
-import { useAuth } from '../../hooks';
+import { useAPI, useAuth } from '../../hooks';
 import { formContainerStyle } from './styles';
 
 const formSchema = z.object({
@@ -18,9 +17,10 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 export const LogInPage = () => {
-    const { palette } = useTheme();
-    const navigate = useNavigate();
+    const API = useAPI();
     const { setAccessToken, setRefreshToken, setUser } = useAuth();
+    const navigate = useNavigate();
+    const { palette } = useTheme();
     const {
         handleSubmit,
         control,

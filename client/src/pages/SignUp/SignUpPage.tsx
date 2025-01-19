@@ -5,9 +5,9 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router';
 import z from 'zod';
-import { API } from '../../api';
 import { FormTextField, PasswordField } from '../../components/fields';
 import { PopUpAlert } from '../../components/PopUpAlert';
+import { useAPI } from '../../hooks';
 import { formContainerStyle } from './styles';
 
 const formSchema = z.object({
@@ -23,6 +23,7 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 export const SignUpPage = () => {
+    const API = useAPI();
     const { palette } = useTheme();
     const navigate = useNavigate();
     const {

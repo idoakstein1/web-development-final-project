@@ -14,8 +14,8 @@ import {
     Typography,
 } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
-import { API } from '../../api';
 import { useAuth } from '../../hooks';
+import { useAPI } from '../../hooks/useAPI';
 import { PostOptions } from '../PostOptions';
 import { cardActionBoxStyle } from './styles';
 import { PostProps } from './types';
@@ -34,12 +34,13 @@ export const Post = ({
     showSettings,
     onDelete,
 }: PostProps) => {
-    const { user, setUser, accessToken } = useAuth();
+    const API = useAPI();
+    const { user, setUser } = useAuth();
     const queryClient = useQueryClient();
 
     const hasUserLiked = user.likes.includes(_id);
     const handleLikeClick = async () => {
-        await API.post[hasUserLiked ? 'dislike' : 'like'](_id, accessToken);
+        await API.post[hasUserLiked ? 'dislike' : 'like'](_id);
         setUser({ ...user, likes: hasUserLiked ? user.likes.filter((id) => id !== _id) : [...user.likes, _id] });
         queryClient.invalidateQueries({ queryKey: [showSettings ? 'userPosts' : 'posts'] });
     };
