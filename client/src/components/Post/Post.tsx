@@ -1,4 +1,4 @@
-import { ChatBubbleOutline, Favorite, FavoriteBorder, MoreVert } from '@mui/icons-material';
+import { ChatBubbleOutline, Favorite, FavoriteBorder } from '@mui/icons-material';
 import {
     Avatar,
     Box,
@@ -16,6 +16,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { API } from '../../api';
 import { useAuth } from '../../hooks';
+import { PostOptions } from '../PostOptions';
 import { cardActionBoxStyle } from './styles';
 import { PostProps } from './types';
 
@@ -31,6 +32,7 @@ export const Post = ({
         photoUrl,
     },
     showSettings,
+    onDelete,
 }: PostProps) => {
     const { user, setUser, accessToken } = useAuth();
     const queryClient = useQueryClient();
@@ -46,11 +48,7 @@ export const Post = ({
         avatar: <Avatar sx={{ height: '50px', width: '50px' }} />,
         title: username,
         titleTypographyProps: { variant: 'h4' },
-        action: showSettings ? (
-            <IconButton sx={{ marginTop: 1 }}>
-                <MoreVert />
-            </IconButton>
-        ) : undefined,
+        action: showSettings ? <PostOptions postId={_id} onDelete={onDelete || (() => {})} /> : undefined,
     };
 
     return (
