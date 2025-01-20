@@ -33,6 +33,7 @@ const testUser: User & { accessToken: string; refreshToken: string } = {
     accessToken: '',
     refreshToken: '',
     likes: [],
+    watchLater: [],
 };
 
 describe('Auth Tests', () => {

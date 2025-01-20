@@ -14,6 +14,7 @@ let testUser: User & { _id: string } = {
     tokens: [],
     likes: [],
     _id: '',
+    watchLater: [],
 };
 let userId: string;
 let postId: string;
