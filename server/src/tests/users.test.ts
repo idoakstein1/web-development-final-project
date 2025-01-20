@@ -1,5 +1,5 @@
 import request from 'supertest';
-import mongoose from 'mongoose';
+import mongoose, { set } from 'mongoose';
 import { Express } from 'express';
 import { User, userModel } from '../models';
 import { compare } from 'bcrypt';
@@ -13,6 +13,7 @@ let testUser: User & { _id: string } = {
     _id: '',
     tokens: [],
     likes: [],
+    watchLater: [],
 };
 let accessToken: string;
 
@@ -133,5 +134,47 @@ describe('Users Tests', () => {
             .set({ authorization: 'bearer ' + accessToken });
 
         expect(statusCode).toBe(401);
+    });
+
+    test('Test add watch later', async () => {
+        const { statusCode } = await request(app)
+            .post(`/watch-later/111222333`)
+            .set({ authorization: 'bearer ' + accessToken });
+        expect(statusCode).toBe(200);
+
+        const { body } = await request(app)
+            .get('/watch-later')
+            .set({ authorization: 'bearer ' + accessToken });
+
+        expect(body.watchLater).toContain('111222333');
+    });
+
+    test('Test add watch later - already exists', async () => {
+        const { statusCode } = await request(app)
+            .post(`/watch-later/111222333`)
+            .set({ authorization: 'bearer ' + accessToken });
+        expect(statusCode).toBe(400);
+    });
+
+    test('Test add watch later - ovveride', async () => {
+        const { statusCode } = await request(app)
+            .put('/watch-later')
+            .send({ watchLater: ['123', '456'] })
+            .set({ authorization: 'bearer ' + accessToken });
+        expect(statusCode).toBe(200);
+
+        const { body } = await request(app)
+            .get('/watch-later')
+            .set({ authorization: 'bearer ' + accessToken });
+
+        expect(body.watchLater).toContain('123');
+        expect(body.watchLater).toContain('456');
+    });
+
+    test('Test add watch later - missing body param', async () => {
+        const { statusCode } = await request(app)
+            .put('/watch-later')
+            .set({ authorization: 'bearer ' + accessToken });
+        expect(statusCode).toBe(400);
     });
 });

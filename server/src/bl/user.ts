@@ -3,7 +3,7 @@ import { ApiError } from '../errors/ApiError';
 import { hashPassword } from '../helperFunctions';
 import { User } from '../models';
 
-export const createUser = async ({ password, ...user }: Omit<User, 'tokens' | 'likes'>) => {
+export const createUser = async ({ password, ...user }: Omit<User, 'tokens' | 'likes' | 'watchLater'>) => {
     const hashedPassword = await hashPassword(password);
     return await createUserInDB({ ...user, password: hashedPassword });
 };

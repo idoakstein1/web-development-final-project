@@ -6,6 +6,7 @@ const userSchema = new Schema({
     password: { type: String, required: true },
     tokens: { type: [String], default: [] },
     likes: { type: [String], default: [] },
+    watchLater: { type: [String], default: [] },
 });
 
 export const userModel = model('users', userSchema);
