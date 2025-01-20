@@ -60,7 +60,7 @@ export const PostForm = ({ post, onSubmit: outerOnSubmit }: PostFormProps) => {
               })
             : await API.post.update(post._id, data);
 
-        queryClient.invalidateQueries({ queryKey: [!post ? 'posts' : 'userPosts'] });
+        queryClient.invalidateQueries({ queryKey: !post ? ['posts'] : ['userPosts', user._id] });
         reset();
         outerOnSubmit && outerOnSubmit();
     };

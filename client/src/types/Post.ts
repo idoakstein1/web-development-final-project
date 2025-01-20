@@ -9,5 +9,5 @@ export type Post = {
     updatedAt: Date;
     rate: number;
     user: { _id: string; username: string };
-    commentsNumber: number;
+    commentsCount: number;
 };
