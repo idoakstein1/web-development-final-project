@@ -10,7 +10,7 @@ export const UserPosts = () => {
     const API = useAPI();
     const { user } = useAuth();
     const { data, isLoading } = useQuery({
-        queryKey: ['userPosts'],
+        queryKey: ['userPosts', user._id],
         queryFn: () => API.post.getUserPosts(user._id),
     });
     const [isDialogOpen, setIsDialogOpen] = useState(false);

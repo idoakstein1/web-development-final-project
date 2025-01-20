@@ -1,4 +1,4 @@
-import { LogInInfo, Metadata, Post, User } from '../types';
+import { Comment, LogInInfo, Metadata, Post, User } from '../types';
 import { useApiClient } from './useAPIClient';
 import { useAuth } from './useAuth';
 
@@ -15,7 +15,7 @@ export const useAPI = () => {
             updateUser: async (username: string, user: Partial<Omit<User, 'password'>>) =>
                 (await apiClient.patch<User>(`/users/${username}`, user)).data,
             logOut: async (refreshToken: string) => {
-                await apiClient.post<void>('/auth/logout', { refreshToken });
+                await apiClient.post('/auth/logout', { refreshToken });
                 logOutFromStorage();
             },
         },
@@ -33,6 +33,12 @@ export const useAPI = () => {
                 postId: string,
                 post: Partial<Pick<Post, 'content' | 'title' | 'externalMovieId' | 'photoUrl' | 'rate'>>
             ) => await apiClient.put(`/posts/${postId}`, post),
+        },
+        comment: {
+            getByPost: async (postId: string) =>
+                (await apiClient.get<{ comments: Comment[] }>(`/comments/post/${postId}`)).data,
+            create: async (comment: Pick<Comment, 'content' | 'user' | 'postId'>) =>
+                await apiClient.post('/comments', comment),
         },
     };
 };

@@ -1,3 +1,4 @@
+export type { Comment } from './Comment';
 export type { LogInInfo } from './LogInInfo';
 export type { Metadata } from './Metadata';
 export type { Post } from './Post';
