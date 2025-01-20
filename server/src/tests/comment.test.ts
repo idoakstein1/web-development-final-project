@@ -48,8 +48,6 @@ beforeAll(async () => {
             rate: 3,
         })
     )._id.toJSON();
-
-    console.log('postId', postId);
 });
 
 afterAll(async () => {
@@ -156,13 +154,13 @@ describe('Comments Tests', () => {
             .set({ authorization: 'bearer ' + accessToken });
         expect(statusCode).toBe(200);
         expect(comments.length).toBe(2);
-        expect(comments[0].content).toBe('Test Comment');
+        expect(comments[0].content).toBe('Test Comment 2');
         expect(comments[0].postId).toBe(postId);
         expect(comments[0].user).toEqual({
             _id: userId,
             username: testUser.username,
         });
-        expect(comments[1].content).toBe('Test Comment 2');
+        expect(comments[1].content).toBe('Test Comment');
         expect(comments[1].postId).toBe(postId);
         expect(comments[1].user).toEqual({
             _id: userId,
