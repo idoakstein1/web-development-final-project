@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { isValidObjectId } from 'mongoose';
-import { createPost, getUserById, getPostById, editPost, deletePost, getPosts, getPostsByUserId } from '../dal';
+import { createPost, deletePost, editPost, getPostById, getPosts, getPostsByUserId, getUserById } from '../dal';
 import { asyncHandler } from '../errors/asyncHandler';
+import { getItemById } from '../services';
 
 export const postRouter = Router();
 
@@ -30,14 +31,7 @@ postRouter.post(
         }
 
         const post = await createPost({
-            post: {
-                title,
-                user,
-                content,
-                externalMovieId,
-                photoUrl,
-                rate,
-            },
+            post: { title, user, content, externalMovie: await getItemById(externalMovieId), photoUrl, rate },
         });
         res.status(200).send(post);
     })

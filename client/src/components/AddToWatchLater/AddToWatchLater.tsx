@@ -7,13 +7,11 @@ export const AddToWatchLater = ({ contentId }: AddToWatchLaterProps) => {
     const API = useAPI();
     const { user } = useAuth();
 
+    const isAddedToWatchLater = user.watchLater.includes(contentId);
+
     const onClick = async () => {
-        // await API.watchLater.add(contentId);
+        // isAddedToWatchLater ? : await API.watchLater.add(contentId);
     };
 
-    return (
-        <IconButton onClick={onClick}>
-            {user.watchLater.includes(contentId) ? <Bookmark /> : <BookmarkBorder />}
-        </IconButton>
-    );
+    return <IconButton onClick={onClick}>{isAddedToWatchLater ? <Bookmark /> : <BookmarkBorder />}</IconButton>;
 };

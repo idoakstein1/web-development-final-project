@@ -1,12 +1,12 @@
 import { InferSchemaType, Schema, model } from 'mongoose';
 
-export const contentSchema = {
+export const contentSchema = new Schema({
     id: { type: String, required: true },
     name: { type: String, required: true },
     year: { type: String, required: true },
     type: { type: String, required: true },
     poster: { type: String, required: true },
-};
+});
 
 const userSchema = new Schema({
     username: { type: String, required: true, unique: true },

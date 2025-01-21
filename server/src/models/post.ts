@@ -1,4 +1,5 @@
 import { InferSchemaType, Schema, model } from 'mongoose';
+import { contentSchema } from './user';
 
 export const userSchema = new Schema({
     _id: { type: Schema.Types.ObjectId, ref: 'users', required: true },
@@ -9,7 +10,7 @@ const postSchema = new Schema({
     title: { type: String, required: true },
     user: { type: userSchema, required: true },
     content: { type: String, required: true },
-    externalMovieId: { type: String, required: true },
+    externalMovie: { type: contentSchema, required: true },
     photoUrl: { type: String, required: true },
     likes: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now },
