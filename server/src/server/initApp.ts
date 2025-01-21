@@ -11,6 +11,7 @@ import {
     userRouter,
     contentRouter,
     watchLaterRouter,
+    recommendedRouter,
 } from '../router';
 import { getConfig, initDBConnection } from '../services';
 
@@ -33,6 +34,7 @@ export const initApp = async () => {
     app.use('/comments', commentRouter);
     app.use('/content', contentRouter);
     app.use('/watch-later', watchLaterRouter);
+    app.use('/recommended', recommendedRouter);
 
     app.use(errorHandler);
 
