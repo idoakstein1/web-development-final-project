@@ -59,3 +59,33 @@ export const searchItems = async ({ title, type, year }: { title: string; type?:
         return { items: items || [] };
     }
 };
+
+export const getItemById = async (id: string) => {
+    const { data } = await getImdbApi().get<{
+        Response: string;
+        Title: string;
+        Year: string;
+        imdbID: string;
+        Type: string;
+        Poster: string;
+    }>('', {
+        params: {
+            i: id,
+        },
+    });
+
+    if (data.Response === 'False') {
+        throw new ApiError({
+            status: 404,
+            message: 'No results found',
+        });
+    } else {
+        return {
+            id: data.imdbID,
+            name: data.Title,
+            year: data.Year,
+            type: data.Type,
+            poster: data.Poster,
+        };
+    }
+};

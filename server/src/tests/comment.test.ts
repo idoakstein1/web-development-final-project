@@ -7,14 +7,13 @@ import { postModel } from '../models';
 
 let app: Express;
 
-let testUser: User & { _id: string } = {
+let testUser: Omit<User, 'watchLater'> & { _id: string } = {
     username: 'testuser',
     email: 'test@user.com',
     password: 'testpassword',
     tokens: [],
     likes: [],
     _id: '',
-    watchLater: [],
 };
 let userId: string;
 let postId: string;

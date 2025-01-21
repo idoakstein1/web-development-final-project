@@ -1,5 +1,5 @@
 import { ProjectionFields } from 'mongoose';
-import { User, userModel } from '../models/user';
+import { ContentSchema, User, userModel } from '../models/user';
 
 export const createUser = async (user: Omit<User, 'tokens' | 'likes' | 'watchLater'>) => await userModel.create(user);
 
@@ -24,7 +24,7 @@ export const updateUser = async ({
 
 export const getUserLikesById = async (id: string) => userModel.findById({ _id: id }, { likes: 1 });
 
-export const overwriteWatchLater = async (userId: string, watchLater: string[]) =>
+export const overwriteWatchLater = async (userId: string, watchLater: ContentSchema[]) =>
     userModel.updateOne({ _id: userId }, { watchLater });
 
 export const getWatchLater = async (userId: string) => userModel.findById({ _id: userId }, { watchLater: 1 });
