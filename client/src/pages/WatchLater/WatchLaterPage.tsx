@@ -1,3 +1,9 @@
-import { MovieList } from '../../components/MovieList';
+import { ContentList } from '../../components/ContentList';
+import { ContentSearch } from '../../components/ContentSearch';
 
-export const WatchLaterPage = () => <MovieList />;
+export const WatchLaterPage = () => (
+    <>
+        <ContentList />
+        <ContentSearch />
+    </>
+);

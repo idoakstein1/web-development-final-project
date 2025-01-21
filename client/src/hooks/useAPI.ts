@@ -1,4 +1,4 @@
-import { Comment, LogInInfo, Metadata, Post, User } from '../types';
+import { Comment, Content, LogInInfo, Metadata, Post, User } from '../types';
 import { useApiClient } from './useAPIClient';
 import { useAuth } from './useAuth';
 
@@ -39,6 +39,13 @@ export const useAPI = () => {
                 (await apiClient.get<{ comments: Comment[] }>(`/comments/post/${postId}`)).data,
             create: async (comment: Pick<Comment, 'content' | 'user' | 'postId'>) =>
                 await apiClient.post('/comments', comment),
+        },
+        content: {
+            search: async (title: string, type: string) =>
+                (await apiClient.get<{ items: Content[] }>('/content/search', { params: { title, type } })).data,
+        },
+        watchLater: {
+            add: async (contentId: string) => await apiClient.post(`/watch-later/${contentId}`, {}),
         },
     };
 };

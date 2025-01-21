@@ -1,17 +1,17 @@
 import { SxProps } from '@mui/material';
 
-export const movieListContainerStyle: SxProps = {
+export const contentListContainerStyle: SxProps = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    width: '100%',
+    width: '50%',
     height: '100vh',
     padding: 5,
     gap: 5,
 };
 
-export const movieListStyle: SxProps = {
-    width: '40%',
+export const contentListStyle: SxProps = {
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     gap: 2,
