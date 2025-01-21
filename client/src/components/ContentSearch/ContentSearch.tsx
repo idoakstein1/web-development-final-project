@@ -64,12 +64,16 @@ export const ContentSearch = () => {
                 <Typography>{isAxiosError(error) ? error.response?.data.message : 'Something went wrong'}</Typography>
             ) : (
                 <List sx={{ height: '85vh', overflow: 'auto' }}>
-                    {(data?.items || []).map(({ id, name, poster, year }) => (
-                        <ListItem key={id} sx={{ gap: 3 }} secondaryAction={<AddToWatchLater contentId={id} />}>
+                    {(data?.items || []).map((content) => (
+                        <ListItem
+                            key={content.id}
+                            sx={{ gap: 3 }}
+                            secondaryAction={<AddToWatchLater content={content} />}
+                        >
                             <ListItemAvatar>
-                                <Avatar sx={{ width: '75px', height: '75px' }} src={poster} />
+                                <Avatar sx={{ width: '75px', height: '75px' }} src={content.poster} />
                             </ListItemAvatar>
-                            <ListItemText primary={name} secondary={year} />
+                            <ListItemText primary={content.name} secondary={content.year} />
                         </ListItem>
                     ))}
                 </List>

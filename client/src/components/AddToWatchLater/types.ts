@@ -1,3 +1,5 @@
+import { Content } from '../../types';
+
 export type AddToWatchLaterProps = {
-    contentId: string;
+    content: Content;
 };

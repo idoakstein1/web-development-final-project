@@ -16,35 +16,20 @@ import {
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { Box, List, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAPI, useAuth } from '../../hooks';
+import { Loader } from '../Loader';
 import { Content } from './Content';
 import { contentListContainerStyle, contentListStyle } from './styles';
 
-const initialContent = [
-    { id: '1', text: 'Movie 1' },
-    { id: '2', text: 'Movie 2' },
-    { id: '3', text: 'Movie 3' },
-    { id: '4', text: 'Movie 4' },
-    { id: '5', text: 'Movie 5' },
-    { id: '6', text: 'Movie 6' },
-    { id: '7', text: 'Movie 7' },
-    { id: '8', text: 'Movie 8' },
-    { id: '9', text: 'Movie 9' },
-    { id: '10', text: 'Movie 10' },
-    { id: '11', text: 'Movie 11' },
-    { id: '12', text: 'Movie 12' },
-    { id: '13', text: 'Movie 13' },
-    { id: '14', text: 'Movie 14' },
-    { id: '15', text: 'Movie 15' },
-    { id: '16', text: 'Movie 16' },
-    { id: '17', text: 'Movie 17' },
-    { id: '18', text: 'Movie 18' },
-    { id: '19', text: 'Movie 19' },
-    { id: '20', text: 'Movie 20' },
-];
-
 export const ContentList = () => {
-    const [content, setContent] = useState(initialContent);
+    const API = useAPI();
+    const { user, setUser } = useAuth();
+    const queryClient = useQueryClient();
+    const { data, isLoading } = useQuery({
+        queryKey: ['watchLater', user._id],
+        queryFn: async () => API.watchLater.get(),
+    });
 
     const dndContextProps: DndContextProps = {
         modifiers: [restrictToVerticalAxis, restrictToParentElement],
@@ -53,32 +38,40 @@ export const ContentList = () => {
             useSensor(PointerSensor),
             useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
         ),
-        onDragEnd: ({ active, over }: DragEndEvent) => {
-            if (!over || active.id === over.id) {
+        onDragEnd: async ({ active, over }: DragEndEvent) => {
+            if (!data || !over || active.id === over.id) {
                 return;
             }
 
-            setContent((prevItems) => {
-                const oldIndex = prevItems.findIndex(({ id }) => id === active.id);
-                const newIndex = prevItems.findIndex(({ id }) => id === over.id);
+            const oldIndex = data.watchLater.findIndex(({ id }) => id === active.id);
+            const newIndex = data.watchLater.findIndex(({ id }) => id === over.id);
 
-                return arrayMove(prevItems, oldIndex, newIndex);
-            });
+            const newWatchList = arrayMove(data.watchLater, oldIndex, newIndex);
+
+            await API.watchLater.update(newWatchList.map(({ id }) => id));
+            queryClient.invalidateQueries({ queryKey: ['watchLater', user._id] });
+            setUser({ ...user, watchLater: newWatchList });
         },
     };
 
-    const handleMarkAsWatched = (id: string) => {
-        setContent((prevItems) => prevItems.filter((item) => item.id !== id));
+    const handleMarkAsWatched = async (contentId: string) => {
+        await API.watchLater.update(user.watchLater.filter(({ id }) => id !== contentId).map(({ id }) => id));
+        queryClient.invalidateQueries({ queryKey: ['watchLater', user._id] });
+        setUser({ ...user, watchLater: user.watchLater.filter(({ id }) => id !== contentId) });
     };
+
+    if (isLoading || !data) {
+        return <Loader />;
+    }
 
     return (
         <Box sx={contentListContainerStyle}>
             <Typography variant="h3">Watch Later</Typography>
             <DndContext {...dndContextProps}>
-                <SortableContext items={content.map(({ id }) => id)} strategy={verticalListSortingStrategy}>
+                <SortableContext items={data.watchLater.map(({ id }) => id)} strategy={verticalListSortingStrategy}>
                     <List sx={contentListStyle}>
-                        {content.map((item) => (
-                            <Content key={item.id} content={item} handleMarkAsWatched={handleMarkAsWatched} />
+                        {data.watchLater.map((content) => (
+                            <Content key={content.id} content={content} handleMarkAsWatched={handleMarkAsWatched} />
                         ))}
                     </List>
                 </SortableContext>

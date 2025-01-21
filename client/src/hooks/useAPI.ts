@@ -27,11 +27,12 @@ export const useAPI = () => {
             like: async (postId: string) => await apiClient.post(`/likes/${postId}`, {}),
             dislike: async (postId: string) => await apiClient.delete(`/likes/${postId}`),
             delete: async (postId: string) => await apiClient.delete(`/posts/${postId}`),
-            create: async (post: Pick<Post, 'user' | 'content' | 'title' | 'externalMovieId' | 'photoUrl' | 'rate'>) =>
-                await apiClient.post('/posts', post),
+            create: async (
+                post: Pick<Post, 'user' | 'content' | 'title' | 'photoUrl' | 'rate'> & { externalMovieId: string }
+            ) => await apiClient.post('/posts', post),
             update: async (
                 postId: string,
-                post: Partial<Pick<Post, 'content' | 'title' | 'externalMovieId' | 'photoUrl' | 'rate'>>
+                post: Partial<Pick<Post, 'content' | 'title' | 'photoUrl' | 'rate'> & { externalMovieId: string }>
             ) => await apiClient.put(`/posts/${postId}`, post),
         },
         comment: {
@@ -46,6 +47,8 @@ export const useAPI = () => {
         },
         watchLater: {
             add: async (contentId: string) => await apiClient.post(`/watch-later/${contentId}`, {}),
+            get: async () => (await apiClient.get<{ watchLater: Content[] }>('/watch-later')).data,
+            update: async (watchLater: string[]) => await apiClient.put('/watch-later', { watchLater }),
         },
     };
 };

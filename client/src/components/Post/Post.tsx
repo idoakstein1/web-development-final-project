@@ -33,7 +33,7 @@ export const Post = ({
         commentsCount,
         rate,
         photoUrl,
-        externalMovieId,
+        externalMovie,
     },
     showSettings,
     onDelete = () => {},
@@ -93,7 +93,7 @@ export const Post = ({
                     {isCommentOpen && <CommentList {...commentListProps} />}
                     <Typography>{commentsCount}</Typography>
                 </Box>
-                <AddToWatchLater contentId={externalMovieId} />
+                <AddToWatchLater content={externalMovie} />
             </CardActions>
         </Card>
     );
