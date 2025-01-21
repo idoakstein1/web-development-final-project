@@ -36,3 +36,14 @@ export const getPosts = async ({ userId, page, limit }: { userId: string; page: 
 export const getPostsByUserId = async (userId: string) => {
     return await postModel.find({ 'user._id': userId }).select('-__v');
 };
+
+export const getFavoritePosts = async (userId: string) => {
+    return await postModel
+        .find({ 'user._id': userId })
+        .find()
+        .where('user._id')
+        .equals(userId)
+        .where('rate')
+        .gte(4)
+        .select('-__v');
+};
