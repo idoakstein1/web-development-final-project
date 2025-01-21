@@ -34,5 +34,5 @@ export const getPosts = async ({ userId, page, limit }: { userId: string; page: 
 };
 
 export const getPostsByUserId = async (userId: string) => {
-    return await postModel.find({ 'user._id': userId }).select('-__v');
+    return await postModel.find({ 'user._id': userId }).sort({ createdAt: -1 }).select('-__v');
 };

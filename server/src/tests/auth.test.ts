@@ -2,6 +2,7 @@ import request from 'supertest';
 import mongoose from 'mongoose';
 import { Express } from 'express';
 import { userModel, User } from '../models/user';
+import { watch } from 'fs';
 
 var app: Express;
 
@@ -47,7 +48,13 @@ describe('Auth Tests', () => {
         const user = response.body.user;
         expect(accessToken).toBeDefined();
         expect(refreshToken).toBeDefined();
-        expect(user).toEqual({ username: testUser.username, email: testUser.email, _id: testUserId, likes: [] });
+        expect(user).toEqual({
+            username: testUser.username,
+            email: testUser.email,
+            _id: testUserId,
+            likes: [],
+            watchLater: [],
+        });
         testUser.accessToken = accessToken;
         testUser.refreshToken = refreshToken;
     });

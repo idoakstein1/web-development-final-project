@@ -2,10 +2,9 @@ import { TextField, TextFieldProps } from '@mui/material';
 import { Controller, FieldValues } from 'react-hook-form';
 import { FormTextFieldProps } from './types';
 
-export const FormTextField = <T extends FieldValues>({ name, control, ...props }: FormTextFieldProps<T>) => {
+export const FormTextField = <T extends FieldValues>({ name, control, onChange, ...props }: FormTextFieldProps<T>) => {
     const textFieldProps: TextFieldProps = {
         autoComplete: 'off',
-        color: 'primary',
         size: 'small',
         ...props,
         InputProps: {
@@ -21,6 +20,12 @@ export const FormTextField = <T extends FieldValues>({ name, control, ...props }
             render={({ field, fieldState: { error } }) => (
                 <TextField
                     {...field}
+                    onChange={(event) => {
+                        const newValue = event.target.value;
+
+                        field.onChange(newValue);
+                        onChange?.(newValue);
+                    }}
                     error={!!error}
                     helperText={error ? error.message : ''}
                     {...props}
