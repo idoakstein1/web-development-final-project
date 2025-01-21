@@ -1,7 +1,8 @@
 import OpenAI from 'openai';
+import { getConfig } from './config';
 
 const openai = new OpenAI({
-    apiKey: '',
+    apiKey: getConfig().chatGPTApiKey,
 });
 
 export const sendMessageToGPT = (prompt: string) => {

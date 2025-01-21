@@ -7,6 +7,7 @@ type Config = {
     refreshTokenSecret: string;
     refreshTokenExpiration: string;
     port: number;
+    chatGPTApiKey: string;
 };
 
 const REQUIRED_ENVIRONMENT_VARIABLES = [
@@ -15,6 +16,7 @@ const REQUIRED_ENVIRONMENT_VARIABLES = [
     'REFRESH_TOKEN_SECRET',
     'TOKEN_EXPIRATION',
     'REFRESH_TOKEN_EXPIRATION',
+    'CHAT_GPT_API_KEY',
 ];
 const checkEnvironmentVariables = () => {
     if (REQUIRED_ENVIRONMENT_VARIABLES.some((variable) => !(variable in process.env))) {
@@ -39,6 +41,7 @@ export const getConfig = () => {
             refreshTokenSecret: env.REFRESH_TOKEN_SECRET,
             refreshTokenExpiration: env.REFRESH_TOKEN_EXPIRATION,
             port: Number(env.PORT) || 8080,
+            chatGPTApiKey: env.CHAT_GPT_API_KEY,
         };
     }
 
