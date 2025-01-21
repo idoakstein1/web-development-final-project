@@ -6,14 +6,13 @@ import { compare } from 'bcrypt';
 
 let app: Express;
 
-let testUser: User & { _id: string } = {
+let testUser: Omit<User, 'watchLater'> & { _id: string } = {
     username: 'testuser',
     email: 'test@user.com',
     password: 'testpassword',
     _id: '',
     tokens: [],
     likes: [],
-    watchLater: [],
 };
 let accessToken: string;
 
@@ -138,7 +137,7 @@ describe('Users Tests', () => {
 
     test('Test add watch later', async () => {
         const { statusCode } = await request(app)
-            .post(`/watch-later/111222333`)
+            .post(`/watch-later/tt0460649`)
             .set({ authorization: 'bearer ' + accessToken });
         expect(statusCode).toBe(200);
 
@@ -146,12 +145,26 @@ describe('Users Tests', () => {
             .get('/watch-later')
             .set({ authorization: 'bearer ' + accessToken });
 
-        expect(body.watchLater).toContain('111222333');
+        expect(
+            body.watchLater.map((e: any) => ({
+                id: e.id,
+                name: e.name,
+                year: e.year,
+                type: e.type,
+                poster: e.poster,
+            }))[0]
+        ).toEqual({
+            id: 'tt0460649',
+            name: 'How I Met Your Mother',
+            year: '2005–2014',
+            type: 'series',
+            poster: 'https://m.media-amazon.com/images/M/MV5BNjg1MDQ5MjQ2N15BMl5BanBnXkFtZTYwNjI5NjA3._V1_SX300.jpg',
+        });
     });
 
     test('Test add watch later - already exists', async () => {
         const { statusCode } = await request(app)
-            .post(`/watch-later/111222333`)
+            .post(`/watch-later/tt0460649`)
             .set({ authorization: 'bearer ' + accessToken });
         expect(statusCode).toBe(400);
     });
@@ -159,7 +172,7 @@ describe('Users Tests', () => {
     test('Test add watch later - ovveride', async () => {
         const { statusCode } = await request(app)
             .put('/watch-later')
-            .send({ watchLater: ['123', '456'] })
+            .send({ watchLater: ['tt1232829', 'tt0151804'] })
             .set({ authorization: 'bearer ' + accessToken });
         expect(statusCode).toBe(200);
 
@@ -167,8 +180,36 @@ describe('Users Tests', () => {
             .get('/watch-later')
             .set({ authorization: 'bearer ' + accessToken });
 
-        expect(body.watchLater).toContain('123');
-        expect(body.watchLater).toContain('456');
+        expect(
+            body.watchLater.map((e: any) => ({
+                id: e.id,
+                name: e.name,
+                year: e.year,
+                type: e.type,
+                poster: e.poster,
+            }))[0]
+        ).toEqual({
+            id: 'tt1232829',
+            name: '21 Jump Street',
+            year: '2012',
+            type: 'movie',
+            poster: 'https://m.media-amazon.com/images/M/MV5BMTg2NjJiODctM2IyMS00MmQ5LWI1YmQtNTBjMTI4M2U2YzA5XkEyXkFqcGc@._V1_SX300.jpg',
+        });
+        expect(
+            body.watchLater.map((e: any) => ({
+                id: e.id,
+                name: e.name,
+                year: e.year,
+                type: e.type,
+                poster: e.poster,
+            }))[1]
+        ).toEqual({
+            id: 'tt0151804',
+            name: 'Office Space',
+            year: '1999',
+            type: 'movie',
+            poster: 'https://m.media-amazon.com/images/M/MV5BOTA5MzQ3MzI1NV5BMl5BanBnXkFtZTgwNTcxNTYxMTE@._V1_SX300.jpg',
+        });
     });
 
     test('Test add watch later - missing body param', async () => {
