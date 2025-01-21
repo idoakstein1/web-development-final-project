@@ -5,15 +5,12 @@ import { searchItems } from '../services';
 export const contentRouter = Router();
 
 contentRouter.get(
-    '/search/:title',
+    '/search',
     asyncHandler(async (req, res) => {
-        const { title } = req.params;
-        const { type, year } = req.query;
+        const { type, year, title } = req.query as Record<string, string | undefined>;
 
         if (!title) {
-            res.status(400).send({
-                message: 'param is missing (title)',
-            });
+            res.status(400).send({ message: 'query param is missing (title)' });
             return;
         }
         res.status(200).send(await searchItems({ title, type: type?.toString(), year: year?.toString() }));

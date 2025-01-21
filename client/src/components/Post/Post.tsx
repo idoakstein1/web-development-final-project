@@ -17,6 +17,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useAuth } from '../../hooks';
 import { useAPI } from '../../hooks/useAPI';
+import { AddToWatchLater } from '../AddToWatchLater';
 import { CommentList, CommentListProps } from '../CommentList';
 import { PostOptions } from '../PostOptions';
 import { cardActionBoxStyle } from './styles';
@@ -32,6 +33,7 @@ export const Post = ({
         commentsCount,
         rate,
         photoUrl,
+        externalMovieId,
     },
     showSettings,
     onDelete = () => {},
@@ -91,6 +93,7 @@ export const Post = ({
                     {isCommentOpen && <CommentList {...commentListProps} />}
                     <Typography>{commentsCount}</Typography>
                 </Box>
+                <AddToWatchLater contentId={externalMovieId} />
             </CardActions>
         </Card>
     );

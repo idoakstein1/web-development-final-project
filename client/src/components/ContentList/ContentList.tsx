@@ -17,10 +17,10 @@ import {
 } from '@dnd-kit/sortable';
 import { Box, List, Typography } from '@mui/material';
 import { useState } from 'react';
-import { Movie } from './Movie';
-import { movieListContainerStyle, movieListStyle } from './styles';
+import { Content } from './Content';
+import { contentListContainerStyle, contentListStyle } from './styles';
 
-const initialMovies = [
+const initialContent = [
     { id: '1', text: 'Movie 1' },
     { id: '2', text: 'Movie 2' },
     { id: '3', text: 'Movie 3' },
@@ -43,8 +43,8 @@ const initialMovies = [
     { id: '20', text: 'Movie 20' },
 ];
 
-export const MovieList = () => {
-    const [movies, setMovies] = useState(initialMovies);
+export const ContentList = () => {
+    const [content, setContent] = useState(initialContent);
 
     const dndContextProps: DndContextProps = {
         modifiers: [restrictToVerticalAxis, restrictToParentElement],
@@ -58,7 +58,7 @@ export const MovieList = () => {
                 return;
             }
 
-            setMovies((prevItems) => {
+            setContent((prevItems) => {
                 const oldIndex = prevItems.findIndex(({ id }) => id === active.id);
                 const newIndex = prevItems.findIndex(({ id }) => id === over.id);
 
@@ -68,17 +68,17 @@ export const MovieList = () => {
     };
 
     const handleMarkAsWatched = (id: string) => {
-        setMovies((prevItems) => prevItems.filter((item) => item.id !== id));
+        setContent((prevItems) => prevItems.filter((item) => item.id !== id));
     };
 
     return (
-        <Box sx={movieListContainerStyle}>
+        <Box sx={contentListContainerStyle}>
             <Typography variant="h3">Watch Later</Typography>
             <DndContext {...dndContextProps}>
-                <SortableContext items={movies.map(({ id }) => id)} strategy={verticalListSortingStrategy}>
-                    <List sx={movieListStyle}>
-                        {movies.map((item) => (
-                            <Movie key={item.id} movie={item} handleMarkAsWatched={handleMarkAsWatched} />
+                <SortableContext items={content.map(({ id }) => id)} strategy={verticalListSortingStrategy}>
+                    <List sx={contentListStyle}>
+                        {content.map((item) => (
+                            <Content key={item.id} content={item} handleMarkAsWatched={handleMarkAsWatched} />
                         ))}
                     </List>
                 </SortableContext>

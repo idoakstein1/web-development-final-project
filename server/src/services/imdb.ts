@@ -39,7 +39,7 @@ export const searchItems = async ({ title, type, year }: { title: string; type?:
     if (data.Response === 'False') {
         throw new ApiError({
             status: 404,
-            message: 'No results found',
+            message: 'No results found or search was too broad',
         });
     } else {
         const items = data.Search?.flatMap((item) => {
@@ -56,8 +56,6 @@ export const searchItems = async ({ title, type, year }: { title: string; type?:
             };
         });
 
-        return {
-            items,
-        };
+        return { items: items || [] };
     }
 };

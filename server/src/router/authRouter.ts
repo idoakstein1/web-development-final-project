@@ -15,7 +15,14 @@ authRouter.post(
             return;
         }
 
-        const user = await findUserByUsername(username, { password: 1, tokens: 1, email: 1, username: 1, likes: 1 });
+        const user = await findUserByUsername(username, {
+            password: 1,
+            tokens: 1,
+            email: 1,
+            username: 1,
+            likes: 1,
+            watchLater: 1,
+        });
         if (!user || !(await compare(password, user.password))) {
             res.status(400).send({ message: 'username or password is incorrect' });
             return;
@@ -29,7 +36,13 @@ authRouter.post(
         res.status(200).send({
             accessToken,
             refreshToken,
-            user: { _id: user._id.toString(), username: user.username, email: user.email, likes: user.likes },
+            user: {
+                _id: user._id.toString(),
+                username: user.username,
+                email: user.email,
+                likes: user.likes,
+                watchLater: user.watchLater,
+            },
         });
     })
 );

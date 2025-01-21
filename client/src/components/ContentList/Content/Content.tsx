@@ -2,9 +2,9 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { CheckCircleOutline, DragIndicator } from '@mui/icons-material';
 import { IconButton, IconButtonProps, ListItem, ListItemIcon, ListItemProps, ListItemText, Paper } from '@mui/material';
-import { MovieProps } from './types';
+import { ContentProps } from './types';
 
-export const Movie = ({ movie: { id, text }, handleMarkAsWatched }: MovieProps) => {
+export const Content = ({ content: { id, text }, handleMarkAsWatched }: ContentProps) => {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
 
     const iconButtonProps: IconButtonProps = {

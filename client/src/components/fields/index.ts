@@ -1,3 +1,5 @@
+export { FormAutoComplete } from './FormAutoComplete';
+export type { FormAutoCompleteProps } from './FormAutoComplete';
 export { FormRatingField } from './FormRatingField';
 export type { FormRatingFieldProps } from './FormRatingField';
 export { FormTextField } from './FormTextField';
