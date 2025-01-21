@@ -27,13 +27,12 @@ afterAll(async () => {
 
 const baseUrl = '/auth';
 
-const testUser: User & { accessToken: string; refreshToken: string } = {
+const testUser: Omit<User, 'watchLater'> & { accessToken: string; refreshToken: string } = {
     ...testUserInfo,
     tokens: [],
     accessToken: '',
     refreshToken: '',
     likes: [],
-    watchLater: [],
 };
 
 describe('Auth Tests', () => {

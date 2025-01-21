@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { asyncHandler } from '../errors/asyncHandler';
 import { overwriteWatchLater, getWatchLater } from '../dal';
 import { addToWatchLater } from '../bl';
+import { getItemById } from '../services';
 
 export const watchLaterRouter = Router();
 
@@ -37,7 +38,10 @@ watchLaterRouter.put(
 
         const userId = res.locals.user._id;
 
-        await overwriteWatchLater(userId, watchLater);
+        const watchLaterDataPromise = watchLater.map((id) => getItemById(id));
+        const watchLaterData = await Promise.all(watchLaterDataPromise);
+
+        await overwriteWatchLater(userId, watchLaterData);
 
         res.status(200).send({ userId, watchLater });
     })
@@ -48,8 +52,8 @@ watchLaterRouter.get(
     asyncHandler(async (req, res) => {
         const userId = res.locals.user._id;
 
-        const watchLater = await getWatchLater(userId);
+        const data = await getWatchLater(userId);
 
-        res.status(200).send(watchLater);
+        res.status(200).send({ watchLater: data?.watchLater });
     })
 );
