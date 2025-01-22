@@ -6,3 +6,4 @@ export { commentRouter } from './commentRouter';
 export { contentRouter } from './contentRouter';
 export { watchLaterRouter } from './watchLaterRouter';
 export { recommendedRouter } from './recommendedRouter';
+export { fileRouter } from './fileRouter';
