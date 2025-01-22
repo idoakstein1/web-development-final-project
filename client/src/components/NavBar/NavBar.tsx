@@ -3,6 +3,8 @@ import {
     AccountCircleOutlined,
     Home,
     HomeOutlined,
+    ThumbUp,
+    ThumbUpOutlined,
     WatchLater,
     WatchLaterOutlined,
 } from '@mui/icons-material';
@@ -32,6 +34,12 @@ export const NavBar = () => {
             icon: <AccountCircleOutlined fontSize="large" />,
             activeIcon: <AccountCircle fontSize="large" />,
             text: 'Profile',
+        },
+        recommendations: {
+            path: '/recommendations',
+            icon: <ThumbUpOutlined fontSize="large" />,
+            activeIcon: <ThumbUp fontSize="large" />,
+            text: 'Recommendations',
         },
     };
 
