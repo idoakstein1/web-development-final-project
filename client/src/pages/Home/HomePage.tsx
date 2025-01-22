@@ -7,6 +7,8 @@ export const HomePage = () => (
         <Box sx={{ display: 'flex', width: '60%' }}>
             <PostList />
         </Box>
-        <PostForm />
+        <Box sx={{ width: '40%' }}>
+            <PostForm />
+        </Box>
     </>
 );
