@@ -46,7 +46,7 @@ export const PostForm = ({ post, onSubmit: outerOnSubmit }: PostFormProps) => {
             title: post?.title || '',
             content: post?.content || '',
             rate: post?.rate || 0,
-            externalMovieId: post?.externalMovieId || 'a',
+            externalMovieId: post?.externalMovieId || 'tt1285016',
         },
     });
 

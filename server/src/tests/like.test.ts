@@ -1,8 +1,7 @@
-import request from 'supertest';
-import mongoose from 'mongoose';
 import { Express } from 'express';
+import mongoose from 'mongoose';
+import request from 'supertest';
 import { Post, postModel, User, userModel } from '../models';
-import { compare } from 'bcrypt';
 
 let app: Express;
 
@@ -12,13 +11,13 @@ let testUser: Partial<User> = {
     password: 'testpassword',
 };
 
-let testPost: Omit<Post, 'user'> = {
+let testPost: Omit<Post, 'user' | 'externalMovie'> & { externalMovieId: string } = {
     likes: 0,
     title: 'Test post',
     createdAt: new Date(),
     updatedAt: new Date(),
     rate: 2,
-    externalMovieId: '123',
+    externalMovieId: 'tt1285016',
     photoUrl: '123',
     content: 'Test content',
     commentsCount: 0,

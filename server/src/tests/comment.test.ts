@@ -43,7 +43,7 @@ beforeAll(async () => {
             },
             title: 'Test Post',
             content: 'Test Content',
-            externalMovieId: 'fsdfsdfsd',
+            externalMovie: { id: '1', name: '1', year: '1', type: '1', poster: '1' },
             photoUrl: 'efsdfsdffdseee',
             rate: 3,
         })

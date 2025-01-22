@@ -75,7 +75,7 @@ describe('Posts Tests', () => {
                     _id: userId,
                     username: testUser.username,
                 },
-                externalMovieId: '123',
+                externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
                 rate: 3,
             });
@@ -95,7 +95,7 @@ describe('Posts Tests', () => {
                     _id: userId + '1',
                     username: testUser.username,
                 },
-                externalMovieId: '123',
+                externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
                 rate: 3,
             });
@@ -112,7 +112,7 @@ describe('Posts Tests', () => {
                     _id: '1',
                     username: testUser.username,
                 },
-                externalMovieId: '123',
+                externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
                 rate: 3,
             });
@@ -129,7 +129,7 @@ describe('Posts Tests', () => {
                     _id: userId,
                     username: testUser.username,
                 },
-                externalMovieId: 'fsdfsdf',
+                externalMovieId: 'tt1285016',
                 rate: 3,
             });
         expect(statusCode).toBe(400);
@@ -161,7 +161,7 @@ describe('Posts Tests', () => {
                     username: testUser.username,
                 },
                 photoUrl: 'fsdfsdf',
-                externalMovieId: 'fsdfsd',
+                externalMovieId: 'tt1285016',
                 rate: 3,
             });
         expect(statusCode).toBe(400);
@@ -177,7 +177,7 @@ describe('Posts Tests', () => {
                     username: testUser.username,
                 },
                 photoUrl: 'fsdfsdf',
-                externalMovieId: 'fsdfsd',
+                externalMovieId: 'tt1285016',
                 title: 'Test Title',
             });
         expect(statusCode).toBe(400);
@@ -258,7 +258,7 @@ describe('Posts Tests', () => {
                     _id: userId,
                     username: testUser.username,
                 },
-                externalMovieId: '123',
+                externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
                 rate: 3,
             });
@@ -293,7 +293,7 @@ describe('Posts Tests', () => {
                     _id: userId2,
                     username: 'testuser2',
                 },
-                externalMovieId: '123',
+                externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
                 rate: 3,
             });
@@ -308,7 +308,7 @@ describe('Posts Tests', () => {
                     _id: userId2,
                     username: 'testuser2',
                 },
-                externalMovieId: '123',
+                externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
                 rate: 3,
             });
@@ -335,7 +335,7 @@ describe('Posts Tests', () => {
                     _id: userId2,
                     username: 'testuser2',
                 },
-                externalMovieId: '123',
+                externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
                 rate: 3,
             });
@@ -350,7 +350,7 @@ describe('Posts Tests', () => {
                     _id: userId2,
                     username: 'testuser2',
                 },
-                externalMovieId: '123',
+                externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
                 rate: 3,
             });

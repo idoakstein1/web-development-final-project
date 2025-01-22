@@ -1,4 +1,6 @@
+import { Content } from '../../../types';
+
 export type ContentProps = {
-    content: { id: string; text: string };
+    content: Content;
     handleMarkAsWatched: (id: string) => void;
 };

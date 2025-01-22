@@ -1,10 +1,20 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { CheckCircleOutline, DragIndicator } from '@mui/icons-material';
-import { IconButton, IconButtonProps, ListItem, ListItemIcon, ListItemProps, ListItemText, Paper } from '@mui/material';
+import {
+    Avatar,
+    IconButton,
+    IconButtonProps,
+    ListItem,
+    ListItemAvatar,
+    ListItemIcon,
+    ListItemProps,
+    ListItemText,
+    Paper,
+} from '@mui/material';
 import { ContentProps } from './types';
 
-export const Content = ({ content: { id, text }, handleMarkAsWatched }: ContentProps) => {
+export const Content = ({ content: { id, name, poster, year }, handleMarkAsWatched }: ContentProps) => {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
 
     const iconButtonProps: IconButtonProps = {
@@ -15,7 +25,7 @@ export const Content = ({ content: { id, text }, handleMarkAsWatched }: ContentP
     };
 
     const listItemProps: ListItemProps = {
-        sx: { transform: CSS.Transform.toString(transform), transition, borderRadius: '10px' },
+        sx: { transform: CSS.Transform.toString(transform), transition, borderRadius: '10px', gap: 3 },
         ref: setNodeRef,
         component: Paper,
         secondaryAction: (
@@ -32,7 +42,10 @@ export const Content = ({ content: { id, text }, handleMarkAsWatched }: ContentP
             <ListItemIcon>
                 <DragIndicator />
             </ListItemIcon>
-            <ListItemText primary={text} />
+            <ListItemAvatar>
+                <Avatar sx={{ width: '75px', height: '75px' }} src={poster} />
+            </ListItemAvatar>
+            <ListItemText primary={name} secondary={year} />
         </ListItem>
     );
 };
