@@ -1,15 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AddCircleOutline, Send } from '@mui/icons-material';
-import { Box, IconButton, Typography } from '@mui/material';
+import { AddCircleOutline, CheckBox, Send } from '@mui/icons-material';
+import { Box, IconButton, SvgIconProps, Typography } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useAPI, useAuth } from '../../hooks';
-import { Post } from '../../types';
+import { Content, Post } from '../../types';
+import { ContentSearch } from '../ContentSearch';
 import { FormRatingField, FormTextField } from '../fields';
 import { PostFormProps } from './types';
 
-const formSchema = (currentPost?: Pick<Post, '_id' | 'title' | 'content' | 'rate' | 'externalMovieId' | 'photoUrl'>) =>
+const formSchema = (currentPost?: Post) =>
     z
         .object({
             title: z
@@ -17,15 +18,18 @@ const formSchema = (currentPost?: Pick<Post, '_id' | 'title' | 'content' | 'rate
                 .min(2, { message: 'Title must be at least 2 characters long' })
                 .max(255, { message: 'Title must be at most 255 characters long' }),
             content: z.string().min(2, { message: 'Content must be at least 2 characters long' }),
-            rate: z.number().int().min(0).max(5),
-            externalMovieId: z.string(),
+            rate: z.number().int().min(1).max(5),
+            externalMovie: z.object({
+                id: z.string(),
+                name: z.string(),
+                year: z.string(),
+                type: z.string(),
+                poster: z.string(),
+            }),
         })
-        .refine(({ title, content, externalMovieId, rate }) =>
+        .refine(({ title, content, rate }) =>
             currentPost
-                ? title !== currentPost.title ||
-                  content !== currentPost.content ||
-                  externalMovieId !== currentPost.externalMovieId ||
-                  rate !== currentPost.rate
+                ? title !== currentPost.title || content !== currentPost.content || rate !== currentPost.rate
                 : true
         );
 type FormSchema = z.infer<ReturnType<typeof formSchema>>;
@@ -38,7 +42,9 @@ export const PostForm = ({ post, onSubmit: outerOnSubmit }: PostFormProps) => {
         handleSubmit,
         control,
         formState: { isValid },
+        setValue,
         reset,
+        watch,
     } = useForm<FormSchema>({
         resolver: zodResolver(formSchema(post)),
         mode: 'onChange',
@@ -46,17 +52,18 @@ export const PostForm = ({ post, onSubmit: outerOnSubmit }: PostFormProps) => {
             title: post?.title || '',
             content: post?.content || '',
             rate: post?.rate || 0,
-            externalMovieId: post?.externalMovieId || 'tt1285016',
+            externalMovie: post?.externalMovie || {},
         },
     });
+    const { externalMovie } = watch();
 
-    const onSubmit = async (data: FormSchema) => {
+    const onSubmit = async ({ externalMovie, ...data }: FormSchema) => {
         !post
             ? await API.post.create({
                   ...data,
                   user: { _id: user._id, username: user.username },
-                  photoUrl:
-                      'https://images-cdn.ubuy.co.in/6352289f38bb253c44612d53-interstellar-movie-poster-24-x-36-inches.jpg',
+                  externalMovieId: externalMovie.id,
+                  photoUrl: externalMovie.poster,
               })
             : await API.post.update(post._id, data);
 
@@ -65,21 +72,31 @@ export const PostForm = ({ post, onSubmit: outerOnSubmit }: PostFormProps) => {
         outerOnSubmit && outerOnSubmit();
     };
 
+    const iconProps: SvgIconProps = { fontSize: 'large', color: isValid ? 'primary' : 'disabled' };
+
+    const SetContentButton = (content: Content) => (
+        <IconButton color="primary" onClick={() => setValue('externalMovie', content)}>
+            <CheckBox />
+        </IconButton>
+    );
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, paddingY: 3, paddingX: 1 }}>
-            {!post && <Typography variant="h4">Share your review</Typography>}
-            <FormTextField label="Title" name="title" control={control} />
-            <FormTextField label="Content" name="content" control={control} multiline rows={4} />
+            {!post && (
+                <>
+                    <Typography variant="h4">Share your review</Typography>
+                    <ContentSearch isField listAction={SetContentButton} />
+                    {externalMovie.name && <Typography variant="h6">Selected movie: {externalMovie.name}</Typography>}
+                </>
+            )}
+            <FormTextField label="Title" name="title" control={control} sx={{ width: '60%' }} />
+            <FormTextField label="Content" name="content" control={control} multiline rows={4} sx={{ width: '60%' }} />
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Typography>Rating:</Typography>
                 <FormRatingField name="rate" control={control} />
             </Box>
             <IconButton sx={{ alignSelf: 'flex-end' }} onClick={handleSubmit(onSubmit)} disabled={!isValid}>
-                {!post ? (
-                    <AddCircleOutline color={isValid ? 'primary' : 'disabled'} fontSize="large" />
-                ) : (
-                    <Send color={isValid ? 'primary' : 'disabled'} fontSize="large" />
-                )}
+                {!post ? <AddCircleOutline {...iconProps} /> : <Send {...iconProps} />}
             </IconButton>
         </Box>
     );

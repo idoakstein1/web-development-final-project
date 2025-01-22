@@ -1,6 +1,6 @@
 import { Post } from '../../types';
 
 export type PostFormProps = {
-    post?: Pick<Post, '_id' | 'title' | 'content' | 'rate' | 'externalMovieId' | 'photoUrl'>;
+    post?: Post;
     onSubmit?: () => void;
 };

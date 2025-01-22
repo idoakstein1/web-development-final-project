@@ -7,9 +7,9 @@ import { useDebounceValue } from 'usehooks-ts';
 import { z } from 'zod';
 import { useAPI } from '../../hooks';
 import { ValueSet } from '../../types';
-import { AddToWatchLater } from '../AddToWatchLater';
 import { FormAutoComplete, FormTextField } from '../fields';
 import { Loader } from '../Loader';
+import { ContentSearchProps } from './types';
 
 const types: ValueSet[] = [
     { id: 'movie', name: 'Movie' },
@@ -25,7 +25,7 @@ const formSchema = z.object({
 });
 type FormSchema = z.infer<typeof formSchema>;
 
-export const ContentSearch = () => {
+export const ContentSearch = ({ listAction, isField }: ContentSearchProps) => {
     const API = useAPI();
     const {
         control,
@@ -47,7 +47,7 @@ export const ContentSearch = () => {
     });
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '50%', paddingY: 5 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Box sx={{ display: 'flex', gap: 1 }}>
                 <FormAutoComplete control={control} name="type" options={types} label="Type" sx={{ width: '20%' }} />
                 <FormTextField
@@ -63,13 +63,9 @@ export const ContentSearch = () => {
             ) : isError ? (
                 <Typography>{isAxiosError(error) ? error.response?.data.message : 'Something went wrong'}</Typography>
             ) : (
-                <List sx={{ height: '85vh', overflow: 'auto' }}>
+                <List sx={{ maxHeight: isField ? '40vh' : '85vh', overflow: 'auto' }}>
                     {(data?.items || []).map((content) => (
-                        <ListItem
-                            key={content.id}
-                            sx={{ gap: 3 }}
-                            secondaryAction={<AddToWatchLater content={content} />}
-                        >
+                        <ListItem key={content.id} sx={{ gap: 3 }} secondaryAction={listAction(content)}>
                             <ListItemAvatar>
                                 <Avatar sx={{ width: '75px', height: '75px' }} src={content.poster} />
                             </ListItemAvatar>
