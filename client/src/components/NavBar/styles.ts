@@ -7,6 +7,7 @@ export const navbarContainerStyle: SxProps = {
     display: 'flex',
     flexDirection: 'column',
     gap: '5vh',
+    marginRight: '3%',
 };
 
 export const logoContainerStyle: SxProps = {

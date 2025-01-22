@@ -7,7 +7,7 @@ export const ProfilePage = () => {
     const { user } = useAuth();
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', width: '82%', height: '100vh' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh' }}>
             <Box sx={{ display: 'flex', height: '25vh', justifyContent: 'space-around', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '25%' }}>
                     <Avatar sx={{ height: '175px', width: '175px' }} />

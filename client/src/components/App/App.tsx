@@ -1,7 +1,7 @@
 import { Box, Divider } from '@mui/material';
 import { Navigate, Route, Routes } from 'react-router';
 import { useAuth } from '../../hooks';
-import { HomePage, LogInPage, ProfilePage, SignUpPage, WatchLaterPage } from '../../pages';
+import { HomePage, LogInPage, ProfilePage, RecommendationsPage, SignUpPage, WatchLaterPage } from '../../pages';
 import { NavBar } from '../NavBar';
 import { ReactNode } from 'react';
 
@@ -26,6 +26,7 @@ export const App = () => {
                 <Route path="/" element={<ProtectedRoute component={<HomePage />} />} />
                 <Route path="/watchLater" element={<ProtectedRoute component={<WatchLaterPage />} />} />
                 <Route path="/profile" element={<ProtectedRoute component={<ProfilePage />} />} />
+                <Route path="/recommendations" element={<ProtectedRoute component={<RecommendationsPage />} />} />
                 <Route path="/logIn" element={<LogInPage />} />
                 <Route path="/signUp" element={<SignUpPage />} />
             </Routes>

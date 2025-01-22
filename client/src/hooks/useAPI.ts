@@ -50,5 +50,10 @@ export const useAPI = () => {
             get: async () => (await apiClient.get<{ watchLater: Content[] }>('/watch-later')).data,
             update: async (watchLater: string[]) => await apiClient.put('/watch-later', { watchLater }),
         },
+        recommendation: {
+            // This is here to not waste the token
+            // get: async () => (await apiClient.get<{ movies: Content[]; series: Content[] }>('/recommended')).data,
+            get: async () => ({ movies: [], series: [] }),
+        },
     };
 };
