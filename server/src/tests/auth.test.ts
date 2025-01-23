@@ -1,8 +1,7 @@
-import request from 'supertest';
-import mongoose from 'mongoose';
 import { Express } from 'express';
-import { userModel, User } from '../models/user';
-import { watch } from 'fs';
+import mongoose from 'mongoose';
+import request from 'supertest';
+import { User, userModel } from '../models/user';
 
 var app: Express;
 
@@ -10,6 +9,7 @@ const testUserInfo = {
     email: 'test@user.com',
     password: 'testpassword',
     username: 'test',
+    profilePicture: 'aaa',
 };
 
 let testUserId = '';
@@ -53,6 +53,7 @@ describe('Auth Tests', () => {
             _id: testUserId,
             likes: [],
             watchLater: [],
+            profilePicture: 'aaa',
         });
         testUser.accessToken = accessToken;
         testUser.refreshToken = refreshToken;

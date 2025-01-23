@@ -3,6 +3,7 @@ import mongoose, { set } from 'mongoose';
 import { Express } from 'express';
 import { User, userModel } from '../models';
 import { compare } from 'bcrypt';
+import { profile } from 'console';
 
 let app: Express;
 
@@ -13,6 +14,7 @@ let testUser: Omit<User, 'watchLater'> & { _id: string } = {
     _id: '',
     tokens: [],
     likes: [],
+    profilePicture: 'aaa',
 };
 let accessToken: string;
 
@@ -117,6 +119,7 @@ describe('Users Tests', () => {
             username: 'guy',
             password: '123',
             email: 'test',
+            profilePicture: 'aaa',
         });
 
         const { statusCode } = await request(app)

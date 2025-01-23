@@ -4,6 +4,7 @@ import { contentSchema } from './user';
 export const userSchema = new Schema({
     _id: { type: Schema.Types.ObjectId, ref: 'users', required: true },
     username: { type: String, required: true },
+    profilePicture: { type: String, required: true },
 });
 
 const postSchema = new Schema({

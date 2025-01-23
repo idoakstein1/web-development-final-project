@@ -9,6 +9,7 @@ let testUser: Partial<User> = {
     username: 'testuser',
     email: 'test@user.com',
     password: 'testpassword',
+    profilePicture: 'aaa',
 };
 
 let testPost: Omit<Post, 'user' | 'externalMovie'> & { externalMovieId: string } = {
@@ -41,7 +42,7 @@ beforeAll(async () => {
 
     const postRes = await request(app)
         .post('/posts')
-        .send({ ...testPost, user: { _id: userId, username: testUser.username } })
+        .send({ ...testPost, user: { _id: userId, username: testUser.username, profilePicture: 'aaa' } })
         .set({ authorization: 'bearer ' + userToken });
 
     expect(postRes.statusCode).toBe(200);

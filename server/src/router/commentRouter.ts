@@ -10,8 +10,8 @@ commentRouter.post(
     '/',
     asyncHandler(async (req, res) => {
         const { user, content, postId } = req.body;
-        if (!user || !postId || !user.username || !user._id) {
-            res.status(400).send({ message: 'body param is missing (user content or postId)' });
+        if (!user || !postId || !user.username || !user._id || !user.profilePicture) {
+            res.status(400).send({ message: 'body param is missing (user, content or postId)' });
             return;
         }
 
