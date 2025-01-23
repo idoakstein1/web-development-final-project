@@ -73,7 +73,9 @@ export const Post = ({
             <Divider />
             <CardContent>
                 <Typography variant="h5">{title}</Typography>
-                <Typography sx={{ color: 'text.secondary' }}>{content}</Typography>
+                <Typography color="textSecondary" sx={{ whiteSpace: 'pre-wrap' }}>
+                    {content}
+                </Typography>
                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', paddingTop: 2 }}>
                     <Typography variant="h6">Rating:</Typography>
                     <Rating value={rate} readOnly />

@@ -29,17 +29,17 @@ export const NavBar = () => {
             activeIcon: <WatchLater fontSize="large" />,
             text: 'Watch Later',
         },
-        profile: {
-            path: '/profile',
-            icon: <AccountCircleOutlined fontSize="large" />,
-            activeIcon: <AccountCircle fontSize="large" />,
-            text: 'Profile',
-        },
         recommendations: {
             path: '/recommendations',
             icon: <ThumbUpOutlined fontSize="large" />,
             activeIcon: <ThumbUp fontSize="large" />,
             text: 'Recommendations',
+        },
+        profile: {
+            path: '/profile',
+            icon: <AccountCircleOutlined fontSize="large" />,
+            activeIcon: <AccountCircle fontSize="large" />,
+            text: 'Profile',
         },
     };
 

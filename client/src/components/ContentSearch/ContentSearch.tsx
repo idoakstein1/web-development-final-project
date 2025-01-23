@@ -63,7 +63,7 @@ export const ContentSearch = ({ listAction, isField }: ContentSearchProps) => {
             ) : isError ? (
                 <Typography>{isAxiosError(error) ? error.response?.data.message : 'Something went wrong'}</Typography>
             ) : (
-                <List sx={{ maxHeight: isField ? '40vh' : '85vh', overflow: 'auto' }}>
+                <List sx={{ maxHeight: isField ? '30vh' : '85vh', overflow: 'auto' }}>
                     {(data?.items || []).map((content) => (
                         <ListItem key={content.id} sx={{ gap: 3 }} secondaryAction={listAction(content)}>
                             <ListItemAvatar>
