@@ -48,7 +48,11 @@ export const CommentList = ({ postId, onClose, showAddComment }: CommentListProp
     }
 
     const onSubmit = async ({ content }: FormSchema) => {
-        await API.comment.create({ postId, content, user: { _id: user._id, username: user.username } });
+        await API.comment.create({
+            postId,
+            content,
+            user: { _id: user._id, username: user.username, profilePicture: user.profilePicture },
+        });
         queryClient.invalidateQueries({ queryKey: ['postComments', postId] });
         queryClient.invalidateQueries({ queryKey: ['posts'] });
         reset();
@@ -75,10 +79,10 @@ export const CommentList = ({ postId, onClose, showAddComment }: CommentListProp
             )}
             {data.comments.length > 0 ? (
                 <List>
-                    {data.comments.map(({ _id, content, user: { username } }) => (
+                    {data.comments.map(({ _id, content, user: { username, profilePicture } }) => (
                         <ListItem key={_id}>
                             <ListItemAvatar>
-                                <Avatar />
+                                <Avatar src={profilePicture} />
                             </ListItemAvatar>
                             <ListItemText primary={username} secondary={content} {...listItemTextProps} />
                         </ListItem>

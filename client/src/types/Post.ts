@@ -10,6 +10,6 @@ export type Post = {
     createdAt: Date;
     updatedAt: Date;
     rate: number;
-    user: { _id: string; username: string };
+    user: { _id: string; username: string; profilePicture: string };
     commentsCount: number;
 };

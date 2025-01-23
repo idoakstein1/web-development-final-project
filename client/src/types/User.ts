@@ -7,4 +7,5 @@ export type User = {
     password: string;
     likes: string[];
     watchLater: Content[];
+    profilePicture: string;
 };

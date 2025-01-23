@@ -36,6 +36,7 @@ export const initApp = async () => {
 
     app.use('/auth', authRouter);
     app.use('/public', Express.static('public'));
+    app.use('/file', fileRouter);
 
     app.use(authenticate);
     app.use('/users', userRouter);
@@ -45,7 +46,6 @@ export const initApp = async () => {
     app.use('/content', contentRouter);
     app.use('/watch-later', watchLaterRouter);
     app.use('/recommended', recommendedRouter);
-    app.use('/file', fileRouter);
 
     app.use(errorHandler);
 

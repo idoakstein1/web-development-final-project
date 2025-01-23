@@ -8,8 +8,16 @@ export const useAPI = () => {
 
     return {
         user: {
-            create: async (user: Pick<User, 'username' | 'password' | 'email'>) =>
-                (await apiClient.post<User>('/users', user)).data,
+            create: async ({
+                profilePicture,
+                ...user
+            }: Pick<User, 'username' | 'password' | 'email'> & { profilePicture: File }) => {
+                const formData = new FormData();
+                formData.append('file', profilePicture);
+                const fileName = (await apiClient.post<{ url: string }>('/file', formData)).data.url;
+
+                (await apiClient.post<User>('/users', { ...user, profilePicture: fileName })).data;
+            },
             logIn: async (username: string, password: string) =>
                 (await apiClient.post<LogInInfo>('/auth/login', { username, password })).data,
             updateUser: async (username: string, user: Partial<Omit<User, 'password'>>) =>
