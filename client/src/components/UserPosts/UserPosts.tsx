@@ -26,6 +26,7 @@ export const UserPosts = () => {
         setSelectedPostId(postId);
     };
     const onDialogClose = () => {
+        setIsInEditMode(false);
         setIsDialogOpen(false);
         setSelectedPostId(null);
     };
@@ -41,7 +42,7 @@ export const UserPosts = () => {
                 <ImageList variant="masonry" cols={3}>
                     {data.posts.map(({ _id, photoUrl }) => (
                         <ImageListItem key={_id} onClick={handlePostClick(_id)}>
-                            <Box component="img" width="25vw" src={`${photoUrl}?fit=crop&auto=format`} />
+                            <Box component="img" width="25vw" src={photoUrl} />
                         </ImageListItem>
                     ))}
                 </ImageList>
@@ -49,13 +50,7 @@ export const UserPosts = () => {
             <Dialog open={isDialogOpen} onClose={onDialogClose} fullWidth>
                 {selectedPost &&
                     (isInEditMode ? (
-                        <PostForm
-                            post={selectedPost}
-                            onSubmit={() => {
-                                setIsInEditMode(false);
-                                onDialogClose();
-                            }}
-                        />
+                        <PostForm post={selectedPost} onSubmit={onDialogClose} />
                     ) : (
                         <Post
                             post={selectedPost}

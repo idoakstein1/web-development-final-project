@@ -4,10 +4,10 @@ import { PostForm } from '../../components/PostForm';
 
 export const HomePage = () => (
     <>
-        <Box sx={{ display: 'flex', width: '60%' }}>
+        <Box sx={{ width: '50%' }}>
             <PostList />
         </Box>
-        <Box sx={{ width: '40%' }}>
+        <Box sx={{ width: '50%' }}>
             <PostForm />
         </Box>
     </>

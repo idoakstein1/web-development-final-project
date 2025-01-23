@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { useAPI, useAuth } from '../../hooks';
 import { Content, Post } from '../../types';
 import { ContentSearch } from '../ContentSearch';
-import { FormRatingField, FormTextField } from '../fields';
+import { FormRatingField, FormTextField, PhotoUpload } from '../fields';
 import { PostFormProps } from './types';
 
 const formSchema = (currentPost?: Post) =>
@@ -26,6 +26,12 @@ const formSchema = (currentPost?: Post) =>
                 type: z.string(),
                 poster: z.string(),
             }),
+            photo: z
+                .instanceof(File, { message: 'Please upload a valid file' })
+                .refine(({ type }) => ['image/jpeg', 'image/png'].includes(type), {
+                    message: 'Only JPEG or PNG files are allowed',
+                })
+                .optional(),
         })
         .refine(({ title, content, rate }) =>
             currentPost
@@ -62,8 +68,7 @@ export const PostForm = ({ post, onSubmit: outerOnSubmit }: PostFormProps) => {
             ? await API.post.create({
                   ...data,
                   user: { _id: user._id, username: user.username },
-                  externalMovieId: externalMovie.id,
-                  photoUrl: externalMovie.poster,
+                  externalMovie,
               })
             : await API.post.update(post._id, data);
 
@@ -81,7 +86,7 @@ export const PostForm = ({ post, onSubmit: outerOnSubmit }: PostFormProps) => {
     );
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, paddingY: 3, paddingX: 1 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, padding: 3 }}>
             {!post && (
                 <>
                     <Typography variant="h4">Share your review</Typography>
@@ -89,12 +94,24 @@ export const PostForm = ({ post, onSubmit: outerOnSubmit }: PostFormProps) => {
                     {externalMovie.name && <Typography variant="h6">Selected movie: {externalMovie.name}</Typography>}
                 </>
             )}
-            <FormTextField label="Title" name="title" control={control} sx={{ width: '60%' }} />
-            <FormTextField label="Content" name="content" control={control} multiline rows={4} sx={{ width: '60%' }} />
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Typography>Rating:</Typography>
-                <FormRatingField name="rate" control={control} />
+            <Box sx={{ display: 'flex', gap: 1 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '40%' }}>
+                    <FormTextField label="Title" name="title" control={control} />
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Typography>Rating:</Typography>
+                        <FormRatingField name="rate" control={control} />
+                    </Box>
+                </Box>
+                <FormTextField
+                    label="Content"
+                    name="content"
+                    control={control}
+                    multiline
+                    rows={3}
+                    sx={{ width: '40%' }}
+                />
             </Box>
+            <PhotoUpload name="photo" control={control} />
             <IconButton sx={{ alignSelf: 'flex-end' }} onClick={handleSubmit(onSubmit)} disabled={!isValid}>
                 {!post ? <AddCircleOutline {...iconProps} /> : <Send {...iconProps} />}
             </IconButton>

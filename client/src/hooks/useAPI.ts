@@ -27,13 +27,37 @@ export const useAPI = () => {
             like: async (postId: string) => await apiClient.post(`/likes/${postId}`, {}),
             dislike: async (postId: string) => await apiClient.delete(`/likes/${postId}`),
             delete: async (postId: string) => await apiClient.delete(`/posts/${postId}`),
-            create: async (
-                post: Pick<Post, 'user' | 'content' | 'title' | 'photoUrl' | 'rate'> & { externalMovieId: string }
-            ) => await apiClient.post('/posts', post),
+            create: async ({
+                photo,
+                externalMovie,
+                ...post
+            }: Pick<Post, 'content' | 'title' | 'rate' | 'user' | 'externalMovie'> & { photo?: File }) => {
+                let fileName;
+                if (photo) {
+                    const formData = new FormData();
+                    formData.append('file', photo);
+                    fileName = (await apiClient.post<{ url: string }>('/file', formData)).data.url;
+                }
+
+                await apiClient.post('/posts', {
+                    ...post,
+                    externalMovieId: externalMovie.id,
+                    photoUrl: fileName || externalMovie.poster,
+                });
+            },
             update: async (
                 postId: string,
-                post: Partial<Pick<Post, 'content' | 'title' | 'photoUrl' | 'rate'> & { externalMovieId: string }>
-            ) => await apiClient.put(`/posts/${postId}`, post),
+                { photo, ...post }: Partial<Pick<Post, 'content' | 'title' | 'rate'> & { photo: File }>
+            ) => {
+                let fileName;
+                if (photo) {
+                    const formData = new FormData();
+                    formData.append('file', photo);
+                    fileName = (await apiClient.post<{ url: string }>('/file', formData)).data.url;
+                }
+
+                await apiClient.put(`/posts/${postId}`, { ...post, photoUrl: fileName });
+            },
         },
         comment: {
             getByPost: async (postId: string) =>
