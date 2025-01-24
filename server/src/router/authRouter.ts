@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { findUserByUsername } from '../dal';
 import { createTokens, verifyRefreshToken } from '../services';
 import { asyncHandler } from '../errors/asyncHandler';
+import { signInOrCreateWithGoogle } from '../bl/google';
 
 export const authRouter = Router();
 
@@ -81,5 +82,20 @@ authRouter.post(
         } catch (error) {
             res.status(400).send({ message: 'invalid token' });
         }
+    })
+);
+
+authRouter.post(
+    '/google',
+    asyncHandler(async (req, res) => {
+        const credential = req.body.credential;
+        if (!credential) {
+            res.status(400).send({ message: 'code param is missing' });
+            return;
+        }
+
+        const data = await signInOrCreateWithGoogle(credential);
+
+        res.status(200).send(data);
     })
 );

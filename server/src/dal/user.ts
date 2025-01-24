@@ -28,3 +28,5 @@ export const overwriteWatchLater = async (userId: string, watchLater: Content[])
     userModel.updateOne({ _id: userId }, { watchLater });
 
 export const getWatchLater = async (userId: string) => userModel.findById({ _id: userId }, { watchLater: 1 });
+
+export const findUserByEmail = async (email: string) => userModel.findOne({ email });
