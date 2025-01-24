@@ -1,3 +1,4 @@
+import { CredentialResponse } from '@react-oauth/google';
 import { Comment, Content, LogInInfo, Metadata, Post, User } from '../types';
 import { useApiClient } from './useAPIClient';
 import { useAuth } from './useAuth';
@@ -40,6 +41,8 @@ export const useAPI = () => {
                 await apiClient.post('/auth/logout', { refreshToken });
                 logOutFromStorage();
             },
+            googleLogIn: async (credential: CredentialResponse['credential']) =>
+                (await apiClient.post<LogInInfo>('/auth/google', { credential })).data,
         },
         post: {
             getPosts: async (pageNumber: number) =>
