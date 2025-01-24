@@ -8,7 +8,7 @@ import { ReactNode } from 'react';
 const ProtectedRoute = ({ component }: { component: ReactNode }) => {
     const { isAuthenticated } = useAuth();
 
-    return isAuthenticated ? component : <Navigate to="/signUp" />;
+    return isAuthenticated ? component : <Navigate to="/logIn" />;
 };
 
 export const App = () => {

@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Button, Typography, useTheme } from '@mui/material';
+import { Box, Button, ButtonProps, Divider, Typography, useTheme } from '@mui/material';
+import { GoogleLogin, GoogleLoginProps } from '@react-oauth/google';
 import { isAxiosError } from 'axios';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -8,6 +9,7 @@ import { z } from 'zod';
 import { FormTextField, PasswordField } from '../../components/fields';
 import { PopUpAlert } from '../../components/PopUpAlert';
 import { useAPI, useAuth } from '../../hooks';
+import { LogInInfo } from '../../types';
 import { formContainerStyle } from './styles';
 
 const formSchema = z.object({
@@ -33,9 +35,9 @@ export const LogInPage = () => {
     const [isShowAlert, setIsShowAlert] = useState(false);
     const [alertContent, setAlertContent] = useState<string | undefined>();
 
-    const onSubmit = async ({ username, password }: FormSchema) => {
+    const onSubmit = async (request: () => Promise<LogInInfo>) => {
         try {
-            const { accessToken, refreshToken, user } = await API.user.logIn(username, password);
+            const { accessToken, refreshToken, user } = await request();
             setAccessToken(accessToken);
             setRefreshToken(refreshToken);
             setUser(user);
@@ -49,16 +51,27 @@ export const LogInPage = () => {
         }
     };
 
+    const googleLoginProps: GoogleLoginProps = {
+        onSuccess: ({ credential }) => onSubmit(() => API.user.googleLogIn(credential)),
+        shape: 'pill',
+        width: 250,
+    };
+    const logInButtonProps: ButtonProps = {
+        onClick: handleSubmit(({ password, username }) => onSubmit(() => API.user.logIn(username, password))),
+        variant: 'contained',
+        disabled: !isValid,
+    };
+
     return (
         <Box sx={formContainerStyle}>
             <Typography variant="h2">Log In</Typography>
+            <GoogleLogin {...googleLoginProps} />
+            <Divider sx={{ width: '20%' }}>Or continue with username and password</Divider>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2vh' }}>
                 <FormTextField label="Username" name="username" control={control} />
                 <PasswordField control={control} />
             </Box>
-            <Button onClick={handleSubmit(onSubmit)} variant="contained" disabled={!isValid}>
-                Log In
-            </Button>
+            <Button {...logInButtonProps}>Log In</Button>
             <NavLink to="/signUp" style={{ color: palette.primary.main }}>
                 Don't have an account?
             </NavLink>

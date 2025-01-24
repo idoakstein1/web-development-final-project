@@ -1,15 +1,9 @@
 import { InferSchemaType, Schema, model } from 'mongoose';
-import { contentSchema } from './user';
-
-export const userSchema = new Schema({
-    _id: { type: Schema.Types.ObjectId, ref: 'users', required: true },
-    username: { type: String, required: true },
-    profilePicture: { type: String, required: true },
-});
+import { contentSchema, userSubSchema } from './general';
 
 const postSchema = new Schema({
     title: { type: String, required: true },
-    user: { type: userSchema, required: true },
+    user: { type: userSubSchema, required: true },
     content: { type: String, required: true },
     externalMovie: { type: contentSchema, required: true },
     photoUrl: { type: String, required: true },

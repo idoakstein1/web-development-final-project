@@ -40,7 +40,7 @@ userRouter.patch(
     '/:username',
     asyncHandler(async (req, res) => {
         const { username: oldUsername } = req.params;
-        const { username, email } = req.body;
+        const { username, profilePicture } = req.body;
 
         const authUserId = res.locals.user._id;
 
@@ -49,12 +49,12 @@ userRouter.patch(
             return;
         }
 
-        if ((!username && !email) || !oldUsername) {
-            res.status(400).send({ message: 'body param is missing (oldUsername and username or email)' });
+        if ((!username && !profilePicture) || !oldUsername) {
+            res.status(400).send({ message: 'body param is missing (oldUsername and username or profilePicture)' });
             return;
         }
 
-        const user = await updateUser({ oldUsername, username, email });
+        const user = await updateUser({ oldUsername, username, profilePicture });
         res.status(200).send(user);
     })
 );

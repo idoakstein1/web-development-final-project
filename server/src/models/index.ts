@@ -1,3 +1,4 @@
-export { userModel, User } from './user';
-export { postModel, Post } from './post';
-export { commentModel, Comment } from './comment';
+export { Comment, commentModel } from './comment';
+export { Content } from './general';
+export { Post, postModel } from './post';
+export { User, userModel } from './user';

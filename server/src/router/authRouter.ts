@@ -25,7 +25,9 @@ authRouter.post(
             watchLater: 1,
             profilePicture: 1,
         });
-        if (!user || !(await compare(password, user.password))) {
+        const isGoogleUser =
+            !!user && (user.password === 'google-sign-in' || (await compare('google-sign-in', user.password)));
+        if (!user || !(await compare(password, user.password)) || isGoogleUser) {
             res.status(400).send({ message: 'username or password is incorrect' });
             return;
         }
