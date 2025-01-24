@@ -10,6 +10,7 @@ let testUser: Partial<User> = {
     username: 'testuser',
     email: 'test@user.com',
     password: 'testpassword',
+    profilePicture: 'aaa',
 };
 
 let userId: string;
@@ -74,6 +75,7 @@ describe('Posts Tests', () => {
                 user: {
                     _id: userId,
                     username: testUser.username,
+                    profilePicture: 'aaa',
                 },
                 externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
@@ -94,6 +96,7 @@ describe('Posts Tests', () => {
                 user: {
                     _id: userId + '1',
                     username: testUser.username,
+                    profilePicture: 'aaa',
                 },
                 externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
@@ -111,6 +114,7 @@ describe('Posts Tests', () => {
                 user: {
                     _id: '1',
                     username: testUser.username,
+                    profilePicture: 'aaa',
                 },
                 externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
@@ -128,6 +132,7 @@ describe('Posts Tests', () => {
                 user: {
                     _id: userId,
                     username: testUser.username,
+                    profilePicture: 'aaa',
                 },
                 externalMovieId: 'tt1285016',
                 rate: 3,
@@ -144,6 +149,7 @@ describe('Posts Tests', () => {
                 user: {
                     _id: userId,
                     username: testUser.username,
+                    profilePicture: 'aaa',
                 },
                 photoUrl: 'fsdfsdf',
                 rate: 3,
@@ -159,6 +165,7 @@ describe('Posts Tests', () => {
                 user: {
                     _id: userId,
                     username: testUser.username,
+                    profilePicture: 'aaa',
                 },
                 photoUrl: 'fsdfsdf',
                 externalMovieId: 'tt1285016',
@@ -175,6 +182,7 @@ describe('Posts Tests', () => {
                 user: {
                     _id: userId,
                     username: testUser.username,
+                    profilePicture: 'aaa',
                 },
                 photoUrl: 'fsdfsdf',
                 externalMovieId: 'tt1285016',
@@ -257,6 +265,7 @@ describe('Posts Tests', () => {
                 user: {
                     _id: userId,
                     username: testUser.username,
+                    profilePicture: 'aaa',
                 },
                 externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
@@ -277,7 +286,9 @@ describe('Posts Tests', () => {
     });
 
     test('Posts test get 2 - other posts', async () => {
-        await request(app).post('/users').send({ username: 'testuser2', email: 'fsdf@fdsf', password: '123' });
+        await request(app)
+            .post('/users')
+            .send({ username: 'testuser2', email: 'fsdf@fdsf', password: '123', profilePicture: 'aaa' });
         const res = await request(app).post('/auth/login').send({ username: 'testuser2', password: '123' });
 
         userId2 = res.body.user._id;
@@ -292,6 +303,7 @@ describe('Posts Tests', () => {
                 user: {
                     _id: userId2,
                     username: 'testuser2',
+                    profilePicture: 'aaa',
                 },
                 externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
@@ -307,6 +319,7 @@ describe('Posts Tests', () => {
                 user: {
                     _id: userId2,
                     username: 'testuser2',
+                    profilePicture: 'aaa',
                 },
                 externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
@@ -334,6 +347,7 @@ describe('Posts Tests', () => {
                 user: {
                     _id: userId2,
                     username: 'testuser2',
+                    profilePicture: 'aaa',
                 },
                 externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',
@@ -349,6 +363,7 @@ describe('Posts Tests', () => {
                 user: {
                     _id: userId2,
                     username: 'testuser2',
+                    profilePicture: 'aaa',
                 },
                 externalMovieId: 'tt1285016',
                 photoUrl: 'https://www.google.com',

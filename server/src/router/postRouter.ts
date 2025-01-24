@@ -10,9 +10,19 @@ postRouter.post(
     '/',
     asyncHandler(async (req, res) => {
         const { user, content, title, externalMovieId, photoUrl, rate } = req.body;
-        if (!user || !title || !user.username || !user._id || !externalMovieId || !photoUrl || !rate) {
+        if (
+            !user ||
+            !title ||
+            !user.username ||
+            !user._id ||
+            !user.profilePicture ||
+            !externalMovieId ||
+            !photoUrl ||
+            !rate
+        ) {
             res.status(400).send({
-                message: 'body param is missing (user (username, _id), title, externalMovieId, photoUrl, rate)',
+                message:
+                    'body param is missing (user (username, _id, profilePicture), title, externalMovieId, photoUrl, rate)',
             });
             return;
         }

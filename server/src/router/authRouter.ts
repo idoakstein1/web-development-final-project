@@ -22,6 +22,7 @@ authRouter.post(
             username: 1,
             likes: 1,
             watchLater: 1,
+            profilePicture: 1,
         });
         if (!user || !(await compare(password, user.password))) {
             res.status(400).send({ message: 'username or password is incorrect' });
@@ -42,6 +43,7 @@ authRouter.post(
                 email: user.email,
                 likes: user.likes,
                 watchLater: user.watchLater,
+                profilePicture: user.profilePicture,
             },
         });
     })

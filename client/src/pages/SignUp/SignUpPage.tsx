@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router';
 import z from 'zod';
-import { FormTextField, PasswordField } from '../../components/fields';
+import { FormTextField, PasswordField, PhotoUpload } from '../../components/fields';
 import { PopUpAlert } from '../../components/PopUpAlert';
 import { useAPI } from '../../hooks';
 import { formContainerStyle } from './styles';
@@ -19,6 +19,11 @@ const formSchema = z.object({
         .regex(/[0-9]/, 'Password must include at least one number')
         .regex(/[A-Z]/, 'Password must include at least one uppercase letter')
         .regex(/[a-z]/, 'Password must include at least one lowercase letter'),
+    profilePicture: z
+        .instanceof(File, { message: 'Please upload a valid file' })
+        .refine(({ type }) => ['image/jpeg', 'image/png'].includes(type), {
+            message: 'Only JPEG or PNG files are allowed',
+        }),
 });
 type FormSchema = z.infer<typeof formSchema>;
 
@@ -58,6 +63,7 @@ export const SignUpPage = () => {
                 <FormTextField label="Username" name="username" control={control} />
                 <FormTextField label="Email" name="email" control={control} />
                 <PasswordField control={control} />
+                <PhotoUpload name="profilePicture" control={control} preview="avatar" />
             </Box>
             <Button onClick={handleSubmit(onSubmit)} variant="contained" disabled={!isValid}>
                 Sign Up

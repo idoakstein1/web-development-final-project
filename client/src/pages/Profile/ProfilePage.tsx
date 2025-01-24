@@ -10,7 +10,7 @@ export const ProfilePage = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh' }}>
             <Box sx={{ display: 'flex', height: '25vh', justifyContent: 'space-around', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: '25%' }}>
-                    <Avatar sx={{ height: '175px', width: '175px' }} />
+                    <Avatar sx={{ height: '175px', width: '175px' }} src={user.profilePicture} />
                     <Box>
                         <Typography variant="h3">{user.username}</Typography>
                         <Typography variant="h5" sx={{ color: 'text.secondary' }}>

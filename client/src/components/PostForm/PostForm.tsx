@@ -67,7 +67,7 @@ export const PostForm = ({ post, onSubmit: outerOnSubmit }: PostFormProps) => {
         !post
             ? await API.post.create({
                   ...data,
-                  user: { _id: user._id, username: user.username },
+                  user: { _id: user._id, username: user.username, profilePicture: user.profilePicture },
                   externalMovie,
               })
             : await API.post.update(post._id, data);
@@ -111,7 +111,7 @@ export const PostForm = ({ post, onSubmit: outerOnSubmit }: PostFormProps) => {
                     sx={{ width: '40%' }}
                 />
             </Box>
-            <PhotoUpload name="photo" control={control} />
+            <PhotoUpload name="photo" control={control} preview="image" />
             <IconButton sx={{ alignSelf: 'flex-end' }} onClick={handleSubmit(onSubmit)} disabled={!isValid}>
                 {!post ? <AddCircleOutline {...iconProps} /> : <Send {...iconProps} />}
             </IconButton>

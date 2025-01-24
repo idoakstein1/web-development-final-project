@@ -28,7 +28,7 @@ export const Post = ({
         _id,
         title,
         content,
-        user: { username },
+        user: { username, profilePicture },
         likes,
         commentsCount,
         rate,
@@ -54,7 +54,7 @@ export const Post = ({
     };
 
     const cardHeaderProps: CardHeaderProps = {
-        avatar: <Avatar sx={{ height: '50px', width: '50px' }} />,
+        avatar: <Avatar sx={{ height: '50px', width: '50px' }} src={profilePicture} />,
         title: username,
         titleTypographyProps: { variant: 'h4' },
         action: showSettings ? <PostOptions postId={_id} onDelete={onDelete} onEdit={onEdit} /> : undefined,

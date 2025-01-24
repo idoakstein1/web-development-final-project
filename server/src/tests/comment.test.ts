@@ -14,6 +14,7 @@ let testUser: Omit<User, 'watchLater'> & { _id: string } = {
     tokens: [],
     likes: [],
     _id: '',
+    profilePicture: 'aaa',
 };
 let userId: string;
 let postId: string;
@@ -40,6 +41,7 @@ beforeAll(async () => {
             user: {
                 _id: userId,
                 username: testUser.username,
+                profilePicture: 'aaa',
             },
             title: 'Test Post',
             content: 'Test Content',
@@ -68,6 +70,7 @@ describe('Comments Tests', () => {
                 user: {
                     _id: userId,
                     username: testUser.username,
+                    profilePicture: 'aaa',
                 },
                 content: 'Test Comment',
                 postId,
@@ -79,6 +82,7 @@ describe('Comments Tests', () => {
         expect(expectedUser).toEqual({
             _id: userId,
             username: testUser.username,
+            profilePicture: 'aaa',
         });
         commentId = _id;
     });
@@ -98,6 +102,7 @@ describe('Comments Tests', () => {
                 user: {
                     _id: userId,
                     username: testUser.username,
+                    profilePicture: 'aaa',
                 },
                 content: 'Test Comment',
                 postId: 'invalidID',
@@ -113,6 +118,7 @@ describe('Comments Tests', () => {
                 user: {
                     _id: userId,
                     username: testUser.username,
+                    profilePicture: 'aaa',
                 },
                 content: 'Test Comment',
                 postId: '60c4b7e3b7a1a4f3f8e8f3d7',
@@ -131,6 +137,7 @@ describe('Comments Tests', () => {
                 user: {
                     _id: userId,
                     username: testUser.username,
+                    profilePicture: 'aaa',
                 },
                 content: 'Test Comment 2',
                 postId,
@@ -142,6 +149,7 @@ describe('Comments Tests', () => {
         expect(expectedUser).toEqual({
             _id: userId,
             username: testUser.username,
+            profilePicture: 'aaa',
         });
     });
 
@@ -159,12 +167,14 @@ describe('Comments Tests', () => {
         expect(comments[0].user).toEqual({
             _id: userId,
             username: testUser.username,
+            profilePicture: 'aaa',
         });
         expect(comments[1].content).toBe('Test Comment');
         expect(comments[1].postId).toBe(postId);
         expect(comments[1].user).toEqual({
             _id: userId,
             username: testUser.username,
+            profilePicture: 'aaa',
         });
     });
 

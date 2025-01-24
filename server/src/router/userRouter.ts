@@ -8,9 +8,9 @@ export const userRouter = Router();
 userRouter.post(
     '/',
     asyncHandler(async (req, res) => {
-        const { username, email, password } = req.body;
-        if (!username || !email || !password) {
-            res.status(400).send({ message: 'body param is missing (username, email, password)' });
+        const { username, email, password, profilePicture } = req.body;
+        if (!username || !email || !password || !profilePicture) {
+            res.status(400).send({ message: 'body param is missing (username, email, password, profilePicture)' });
             return;
         }
         if (await isUsernameExists(username)) {
@@ -18,7 +18,7 @@ userRouter.post(
             return;
         }
 
-        const user = await createUser({ username, email, password });
+        const user = await createUser({ username, email, password, profilePicture });
         res.status(200).send(user);
     })
 );

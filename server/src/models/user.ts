@@ -15,6 +15,7 @@ const userSchema = new Schema({
     tokens: { type: [String], default: [] },
     likes: { type: [String], default: [] },
     watchLater: { type: [contentSchema], default: [] },
+    profilePicture: { type: String, required: true },
 });
 
 export const userModel = model('users', userSchema);
