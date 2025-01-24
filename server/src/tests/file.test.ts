@@ -44,9 +44,8 @@ describe('File Tests', () => {
             .attach('file', filePath);
         expect(response.statusCode).toBe(200);
         let url = response.body.url;
-        console.log('url: ' + url);
+
         url = url.replace(/^.*\/\/[^/]+/, '');
-        console.log('url: ' + url);
 
         const response2 = await request(app)
             .get(url)

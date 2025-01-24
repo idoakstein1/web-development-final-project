@@ -45,6 +45,7 @@ describe('Users Tests', () => {
         const { statusCode } = await request(app).post('/users').send({
             email: 'example@gmail.com',
             password: 'testpassword',
+            profilePicture: 'aaa',
         });
         expect(statusCode).toBe(400);
     });
@@ -52,6 +53,7 @@ describe('Users Tests', () => {
         const { statusCode } = await request(app).post('/users').send({
             username: 'tests242q',
             password: 'testpassword',
+            profilePicture: 'aaa',
         });
         expect(statusCode).toBe(400);
     });
@@ -59,6 +61,15 @@ describe('Users Tests', () => {
         const { statusCode } = await request(app).post('/users').send({
             email: 'example@gmail.com',
             username: 'testpassword',
+            profilePicture: 'aaa',
+        });
+        expect(statusCode).toBe(400);
+    });
+    test('Test create user with missing body param - profilePicture', async () => {
+        const { statusCode } = await request(app).post('/users').send({
+            email: 'example@gmail.com',
+            username: 'testpassword',
+            password: 'aaa',
         });
         expect(statusCode).toBe(400);
     });
@@ -68,8 +79,9 @@ describe('Users Tests', () => {
             username: 'testuser',
             email: 'example@gmail.com',
             password: 'testpassword',
+            profilePicture: 'aaa',
         });
-        expect(statusCode).toBe(400);
+        expect(statusCode).toBe(409);
     });
 
     test('Test find user by username', async () => {

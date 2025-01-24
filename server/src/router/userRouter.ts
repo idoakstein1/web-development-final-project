@@ -14,7 +14,7 @@ userRouter.post(
             return;
         }
         if (await isUsernameExists(username)) {
-            res.status(400).send({ message: `username: ${username} already exists` });
+            res.status(409).send({ message: `username: ${username} already exists` });
             return;
         }
 
@@ -27,6 +27,9 @@ userRouter.get(
     '/:username',
     asyncHandler(async (req, res) => {
         const { username } = req.params;
+        if (!username) {
+            res.status(400).send({ message: 'Missing param username' });
+        }
         const user = await findUserByUsername(username);
         if (!user) {
             res.status(404).send({ message: `username: ${username} not found` });
