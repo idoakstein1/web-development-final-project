@@ -20,7 +20,7 @@ export const ProfilePage = () => {
                 </Box>
                 <UserSettings />
             </Box>
-            <Divider orientation="horizontal" sx={{ borderBottomWidth: 2 }} />
+            <Divider sx={{ borderBottomWidth: 2 }} />
             <UserPosts />
         </Box>
     );
