@@ -14,10 +14,7 @@ export const signInOrCreateWithGoogle = async (code: string) => {
     }
 
     let user = await findUserByEmail(userGmail);
-    let userId: string;
-    if (user) {
-        userId = user._id.toString();
-    } else {
+    if (!user) {
         user = await createUser({
             username: payload.given_name + payload.family_name,
             email: userGmail,
@@ -26,13 +23,12 @@ export const signInOrCreateWithGoogle = async (code: string) => {
                 payload.picture ??
                 `https://eu.ui-avatars.com/api/?name=${payload.given_name}+${payload.family_name}&size=250`,
         });
-
-        userId = user._id.toString();
     }
 
     const { accessToken, refreshToken } = createTokens({ _id: user._id });
     user.tokens.push(refreshToken);
     await user.save();
+
     return {
         accessToken,
         refreshToken,
