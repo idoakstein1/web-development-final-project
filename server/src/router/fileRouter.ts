@@ -1,9 +1,12 @@
 import { Router } from 'express';
 import multer from 'multer';
+import { getConfig } from '../services';
+
+const { port, env } = getConfig();
 
 export const fileRouter = Router();
 
-const base = 'http://localhost:3030' + '/';
+const base = `${env === 'production' ? 'https' : 'http'}://localhost:${port}/`;
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/');

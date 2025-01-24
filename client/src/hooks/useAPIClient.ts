@@ -7,7 +7,7 @@ type AxiosInterceptorError = AxiosError<{ message: string }> & { config: AxiosRe
 export const useApiClient = () => {
     const { accessToken, refreshToken, setAccessToken, setRefreshToken } = useAuth();
 
-    const axiosInstance = axios.create({ baseURL: 'http://localhost:3030' });
+    const axiosInstance = axios.create({ baseURL: import.meta.env.VITE_SERVER_URL });
 
     axiosInstance.interceptors.request.use(
         (config) => {

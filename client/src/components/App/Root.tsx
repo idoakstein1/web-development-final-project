@@ -11,7 +11,7 @@ const queryClient = new QueryClient();
 export const Root = () => (
     <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
-            <GoogleOAuthProvider clientId="701607865903-euidhkf5c3288tf3afpa6m5oniavtt5o.apps.googleusercontent.com">
+            <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
                 <AuthProvider>
                     <CssBaseline />
                     <BrowserRouter>

@@ -72,6 +72,7 @@ export const Post = ({
             <CardMedia component="img" sx={{ objectFit: 'cover' }} image={photoUrl} />
             <Divider />
             <CardContent>
+                <Typography variant="h6">Review on: {externalMovie.name}</Typography>
                 <Typography variant="h5">{title}</Typography>
                 <Typography color="textSecondary" sx={{ whiteSpace: 'pre-wrap' }}>
                     {content}

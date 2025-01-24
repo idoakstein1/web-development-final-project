@@ -15,12 +15,14 @@ import {
     fileRouter,
 } from '../router';
 import { getConfig, initDBConnection } from '../services';
+import { createServer as createHttpsServer } from 'https';
+import { readFileSync } from 'fs';
 
 config();
 
 export const initApp = async () => {
     await initDBConnection();
-    const { port } = getConfig();
+    const { port, env } = getConfig();
 
     const app = Express();
 
@@ -53,8 +55,18 @@ export const initApp = async () => {
         res.status(500).send({ message: 'Error' });
     });
 
-    const server = app.listen(port, () => {
-        console.log(`listening on port ${port}`);
+    const server = (
+        env === 'development'
+            ? app
+            : createHttpsServer(
+                  {
+                      key: readFileSync('../../certs/client-key.pem'),
+                      cert: readFileSync('../../certs/client-cert.pem'),
+                  },
+                  app
+              )
+    ).listen(port, () => {
+        console.log(`listening on port ${port} (${env === 'production' ? 'https' : 'http'})`);
     });
 
     return { app, server };

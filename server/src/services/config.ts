@@ -1,6 +1,7 @@
 import { config as configDotenv } from 'dotenv';
 
 type Config = {
+    env: 'development' | 'production';
     databaseURL: string;
     accessTokenSecret: string;
     accessTokenExpiration: string;
@@ -37,6 +38,7 @@ export const getConfig = () => {
         const { env } = process as { env: Record<string, string> };
 
         config = {
+            env: env.NODE_ENV === 'production' ? env.NODE_ENV : 'development',
             databaseURL: env.DATABASE_URL,
             accessTokenSecret: env.ACCESS_TOKEN_SECRET,
             accessTokenExpiration: env.TOKEN_EXPIRATION,
