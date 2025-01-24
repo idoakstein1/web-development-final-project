@@ -38,6 +38,6 @@ jobs:
                   script: |
                       docker pull ${{ secrets.DOCKER_USERNAME }}/client
                       docker pull ${{ secrets.DOCKER_USERNAME }}/server
-                      cd /path/to/your/project
+                      cd /home/st111/WatchIt
                       docker-compose down
                       docker-compose up -d
