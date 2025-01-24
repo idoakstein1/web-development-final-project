@@ -24,10 +24,10 @@ jobs:
 
             - name: Build and Push Images
               run: |
-                  docker build -t WatchIt/client ./client
-                  docker build -t WatchIt/server ./server
-                  docker push WatchIt/client
-                  docker push WatchIt/server
+                  docker build -t ${{ secrets.DOCKER_USERNAME }}/client ./client
+                  docker build -t ${{ secrets.DOCKER_USERNAME }}/server ./server
+                  docker push ${{ secrets.DOCKER_USERNAME }}/client
+                  docker push ${{ secrets.DOCKER_USERNAME }}/server
 
             - name: Deploy via SSH
               uses: appleboy/ssh-action@v0.1.6
@@ -37,8 +37,8 @@ jobs:
                   password: ${{ secrets.SSH_PASSWORD }}
                   port: 4000
                   script: |
-                      docker pull WatchIt/client
-                      docker pull WatchIt/server
+                      docker pull ${{ secrets.DOCKER_USERNAME }}/client
+                      docker pull ${{ secrets.DOCKER_USERNAME }}/server
                       cd /home/st111/WatchIt
                       docker-compose down
                       docker-compose up -d
