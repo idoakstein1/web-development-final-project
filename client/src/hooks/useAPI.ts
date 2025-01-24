@@ -20,8 +20,22 @@ export const useAPI = () => {
             },
             logIn: async (username: string, password: string) =>
                 (await apiClient.post<LogInInfo>('/auth/login', { username, password })).data,
-            updateUser: async (username: string, user: Partial<Omit<User, 'password'>>) =>
-                (await apiClient.patch<User>(`/users/${username}`, user)).data,
+            updateUser: async (
+                username: string,
+                {
+                    profilePicture,
+                    ...user
+                }: Partial<Omit<User, 'password' | 'profilePicture'> & { profilePicture?: File }>
+            ) => {
+                let fileName;
+                if (profilePicture) {
+                    const formData = new FormData();
+                    formData.append('file', profilePicture);
+                    fileName = (await apiClient.post<{ url: string }>('/file', formData)).data.url;
+                }
+
+                return (await apiClient.patch<User>(`/users/${username}`, { ...user, profilePicture: fileName })).data;
+            },
             logOut: async (refreshToken: string) => {
                 await apiClient.post('/auth/logout', { refreshToken });
                 logOutFromStorage();

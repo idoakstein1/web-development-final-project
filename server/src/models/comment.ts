@@ -1,9 +1,9 @@
 import { InferSchemaType, Schema, model } from 'mongoose';
-import { userSchema } from './post';
+import { userSubSchema } from './general';
 
 const commentSchema = new Schema({
     postId: { type: Schema.Types.ObjectId, ref: 'posts', required: true },
-    user: { type: userSchema, required: true },
+    user: { type: userSubSchema, required: true },
     content: { type: String },
     createdAt: { type: Date, default: Date.now },
 });

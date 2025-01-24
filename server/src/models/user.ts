@@ -1,12 +1,7 @@
 import { InferSchemaType, Schema, model } from 'mongoose';
-
-export const contentSchema = new Schema({
-    id: { type: String, required: true },
-    name: { type: String, required: true },
-    year: { type: String, required: true },
-    type: { type: String, required: true },
-    poster: { type: String, required: true },
-});
+import { commentModel } from './comment';
+import { contentSchema } from './general';
+import { postModel } from './post';
 
 const userSchema = new Schema({
     username: { type: String, required: true, unique: true },
@@ -18,6 +13,22 @@ const userSchema = new Schema({
     profilePicture: { type: String, required: true },
 });
 
+userSchema.post('findOneAndUpdate', async (user) => {
+    if (!user) {
+        return;
+    }
+
+    const { _id, username, profilePicture } = user;
+
+    await postModel.updateMany(
+        { 'user._id': _id },
+        { 'user.username': username, 'user.profilePicture': profilePicture }
+    );
+    await commentModel.updateMany(
+        { 'user._id': _id },
+        { 'user.username': username, 'user.profilePicture': profilePicture }
+    );
+});
+
 export const userModel = model('users', userSchema);
 export type User = InferSchemaType<typeof userSchema>;
-export type ContentSchema = InferSchemaType<typeof contentSchema>;

@@ -11,15 +11,15 @@ export const createUser = async ({ password, ...user }: Omit<User, 'tokens' | 'l
 export const updateUser = async ({
     oldUsername,
     username,
-    email,
+    profilePicture,
 }: {
     oldUsername: User['username'];
     username: User['username'];
-    email: User['email'];
+    profilePicture: User['profilePicture'];
 }) => {
     if (oldUsername !== username && (await findUserByUsername(username))) {
         throw new ApiError({ status: 400, message: `username: ${username} already exists` });
     }
 
-    return await updateUserInDB({ oldUsername, username, email });
+    return await updateUserInDB({ oldUsername, username, profilePicture });
 };
