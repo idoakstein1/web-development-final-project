@@ -91,7 +91,7 @@ export const PostForm = ({ post, onSubmit: outerOnSubmit }: PostFormProps) => {
                 <>
                     <Typography variant="h4">Share your review</Typography>
                     <ContentSearch isField listAction={SetContentButton} />
-                    {externalMovie.name && <Typography variant="h6">Selected movie: {externalMovie.name}</Typography>}
+                    {externalMovie.name && <Typography variant="h6">Selected content: {externalMovie.name}</Typography>}
                 </>
             )}
             <Box sx={{ display: 'flex', gap: 1 }}>

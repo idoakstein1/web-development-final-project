@@ -2,19 +2,20 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { config } from 'dotenv';
 import Express, { NextFunction, Request, Response } from 'express';
-import swaggerUI from 'swagger-ui-express';
+import { createServer as createHttpsServer } from 'https';
 import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerUI from 'swagger-ui-express';
 import { authenticate, errorHandler } from '../middlewares';
 import {
     authRouter,
     commentRouter,
+    contentRouter,
+    fileRouter,
     likeRouter,
     postRouter,
-    userRouter,
-    contentRouter,
-    watchLaterRouter,
     recommendedRouter,
-    fileRouter,
+    userRouter,
+    watchLaterRouter,
 } from '../router';
 import { getConfig, initDBConnection } from '../services';
 
@@ -22,7 +23,7 @@ config();
 
 export const initApp = async () => {
     await initDBConnection();
-    const { port, nodeEnv } = getConfig();
+    const { port, env, httpsCert, httpsKey } = getConfig();
 
     const app = Express();
 
@@ -39,7 +40,8 @@ export const initApp = async () => {
     app.use('/auth', authRouter);
     app.use('/public', Express.static('public'));
     app.use('/file', fileRouter);
-    if (nodeEnv == 'development') {
+
+    if (env === 'development') {
         const options = {
             definition: {
                 openapi: '3.0.0',
@@ -67,9 +69,16 @@ export const initApp = async () => {
 
     app.use(errorHandler);
 
-    const server = app.listen(port, () => {
-        console.log(`listening on port ${port}`);
+    app.use((_err: Error, _req: Request, res: Response, _next: NextFunction) => {
+        res.status(500).send({ message: 'Error' });
     });
+
+    const server = (env === 'development' ? app : createHttpsServer({ key: httpsKey, cert: httpsCert }, app)).listen(
+        port,
+        () => {
+            console.log(`listening on port ${port} (${env === 'production' ? 'https' : 'http'})`);
+        }
+    );
 
     return { app, server };
 };

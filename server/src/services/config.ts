@@ -1,6 +1,7 @@
 import { config as configDotenv } from 'dotenv';
 
 type Config = {
+    env: 'development' | 'production';
     databaseURL: string;
     accessTokenSecret: string;
     accessTokenExpiration: string;
@@ -9,7 +10,9 @@ type Config = {
     port: number;
     chatGPTApiKey: string;
     googleClientId: string;
-    nodeEnv: string;
+    httpsCert: string;
+    httpsKey: string;
+    serverUrl: string;
 };
 
 const REQUIRED_ENVIRONMENT_VARIABLES = [
@@ -20,6 +23,9 @@ const REQUIRED_ENVIRONMENT_VARIABLES = [
     'REFRESH_TOKEN_EXPIRATION',
     'CHAT_GPT_API_KEY',
     'GOOGLE_CLIENT_ID',
+    'HTTPS_KEY',
+    'HTTPS_CERT',
+    'SERVER_URL',
 ];
 const checkEnvironmentVariables = () => {
     if (REQUIRED_ENVIRONMENT_VARIABLES.some((variable) => !(variable in process.env))) {
@@ -38,6 +44,7 @@ export const getConfig = () => {
         const { env } = process as { env: Record<string, string> };
 
         config = {
+            env: env.NODE_ENV === 'production' ? env.NODE_ENV : 'development',
             databaseURL: env.DATABASE_URL,
             accessTokenSecret: env.ACCESS_TOKEN_SECRET,
             accessTokenExpiration: env.TOKEN_EXPIRATION,
@@ -46,7 +53,9 @@ export const getConfig = () => {
             port: Number(env.PORT) || 8080,
             chatGPTApiKey: env.CHAT_GPT_API_KEY,
             googleClientId: env.GOOGLE_CLIENT_ID,
-            nodeEnv: env.NODE_ENV || 'development',
+            httpsCert: env.HTTPS_CERT,
+            httpsKey: env.HTTPS_KEY,
+            serverUrl: env.SERVER_URL,
         };
     }
 
