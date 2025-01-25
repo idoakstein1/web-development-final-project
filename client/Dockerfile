@@ -1,15 +1,15 @@
 # Base image
 FROM node:22.11.0-slim
 
-WORKDIR /home/st111/WatchIt/client
+WORKDIR /web-development-final-project/client
 
 COPY package*.json ./
 
 RUN npm install
 
-RUN npm run build
-
 COPY . .
+
+RUN npm run build
 
 EXPOSE 5173
 
