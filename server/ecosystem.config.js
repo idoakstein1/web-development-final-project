@@ -2,7 +2,7 @@ module.exports = {
     apps: [
         {
             name: 'WatchIt server',
-            script: './dist/index.js',
+            script: 'dist/index.js',
         },
     ],
 };
