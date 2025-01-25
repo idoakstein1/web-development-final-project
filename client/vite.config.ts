@@ -1,5 +1,6 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { readFileSync } from 'fs';
+import { defineConfig } from 'vite';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -11,8 +12,8 @@ export default defineConfig({
         https:
             process.env.NODE_ENV === 'production'
                 ? {
-                      key: `${process.env.PATH_TO_CERTS}client-key.pem`,
-                      cert: `${process.env.PATH_TO_CERTS}client-cert.pem`,
+                      key: readFileSync(`${process.env.PATH_TO_CERTS}client-key.pem`),
+                      cert: readFileSync(`${process.env.PATH_TO_CERTS}client-cert.pem`),
                   }
                 : undefined,
     } as any,
