@@ -4,7 +4,7 @@ WORKDIR /web-development-final-project/server
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
