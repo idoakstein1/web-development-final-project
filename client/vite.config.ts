@@ -8,8 +8,8 @@ export default defineConfig({
         https:
             process.env.NODE_ENV === 'production'
                 ? {
-                      key: '../../certs/client-key.pem',
-                      cert: '../../certs/client-cert.pem',
+                      key: `${process.env.PATH_TO_CERTS}client-key.pem`,
+                      cert: `${process.env.PATH_TO_CERTS}client-cert.pem`,
                   }
                 : undefined,
     },

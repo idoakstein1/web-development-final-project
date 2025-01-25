@@ -1,18 +1,14 @@
 version: '3.8'
 services:
     client:
-        build:
-            context: ./client
-            dockerfile: Dockerfile
+        image: idoakstein/watchit-client:latest
         ports:
             - '5173:80'
         env_file:
             - /env/client.env
         restart: always
     server:
-        build:
-            context: ./server
-            dockerfile: Dockerfile
+        image: idoakstein/watchit-server:latest
         ports:
             - '8080:443'
         env_file:

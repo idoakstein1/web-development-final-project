@@ -22,7 +22,7 @@ config();
 
 export const initApp = async () => {
     await initDBConnection();
-    const { port, env } = getConfig();
+    const { port, env, pathToCerts } = getConfig();
 
     const app = Express();
 
@@ -60,8 +60,8 @@ export const initApp = async () => {
             ? app
             : createHttpsServer(
                   {
-                      key: readFileSync('../../certs/client-key.pem'),
-                      cert: readFileSync('../../certs/client-cert.pem'),
+                      key: readFileSync(`${pathToCerts}client-key.pem`),
+                      cert: readFileSync(`${pathToCerts}client-key.pem`),
                   },
                   app
               )

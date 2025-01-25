@@ -10,6 +10,7 @@ type Config = {
     port: number;
     chatGPTApiKey: string;
     googleClientId: string;
+    pathToCerts: string;
 };
 
 const REQUIRED_ENVIRONMENT_VARIABLES = [
@@ -20,6 +21,7 @@ const REQUIRED_ENVIRONMENT_VARIABLES = [
     'REFRESH_TOKEN_EXPIRATION',
     'CHAT_GPT_API_KEY',
     'GOOGLE_CLIENT_ID',
+    'PATH_TO_CERTS',
 ];
 const checkEnvironmentVariables = () => {
     if (REQUIRED_ENVIRONMENT_VARIABLES.some((variable) => !(variable in process.env))) {
@@ -47,6 +49,7 @@ export const getConfig = () => {
             port: Number(env.PORT) || 8080,
             chatGPTApiKey: env.CHAT_GPT_API_KEY,
             googleClientId: env.GOOGLE_CLIENT_ID,
+            pathToCerts: env.PATH_TO_CERTS,
         };
     }
 
