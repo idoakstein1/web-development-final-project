@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
     push:
         branches:
-            - add-cicd
+            - main
 
 jobs:
     deploy:
