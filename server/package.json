@@ -4,8 +4,7 @@
   "main": "index.ts",
   "scripts": {
     "dev:start": "nodemon index.ts",
-    "start:pm2": "pm2 start ecosystem.config.js",
-    "start": "node dist/index.js",
+    "start": "pm2 start ecosystem.config.js",
     "build": "npx tsc",
     "test": "npx jest && --detectOpenHandles --forceExit --runInBand"
   },
