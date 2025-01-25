@@ -23,7 +23,7 @@ jobs:
 
             - name: Build and Push Images
               run: |
-                  docker build -t ${{ secrets.DOCKER_USERNAME }}/watchit-client ./client
+                  docker build --build-arg HTTPS_CERT=${{ secrets.HTTPS_CERT }} --build-arg HTTPS_KEY=${{ secrets.HTTPS_KEY }} -t ${{ secrets.DOCKER_USERNAME }}/watchit-client ./client
                   docker build -t ${{ secrets.DOCKER_USERNAME }}/watchit-server ./server
                   docker push ${{ secrets.DOCKER_USERNAME }}/watchit-client
                   docker push ${{ secrets.DOCKER_USERNAME }}/watchit-server

@@ -1,8 +1,5 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { readFileSync } from 'fs';
-
-const pathToCerts = process.env.PATH_TO_CERTS || '/home/st111/WatchIt/certs/';
+import { defineConfig } from 'vite';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -14,8 +11,8 @@ export default defineConfig({
         https:
             process.env.NODE_ENV === 'production'
                 ? {
-                      key: readFileSync(`${pathToCerts}client-key.pem`),
-                      cert: readFileSync(`${pathToCerts}client-cert.pem`),
+                      key: process.env.HTTPS_KEY,
+                      cert: process.env.HTTPS_CERT,
                   }
                 : undefined,
     } as any,
