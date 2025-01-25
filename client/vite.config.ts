@@ -8,12 +8,12 @@ export default defineConfig({
         port: 3000,
         host: '0.0.0.0',
         allowedHosts: ['node07.cs.colman.ac.il', 'localhost', '0.0.0.0'],
-        // https:
-        //     process.env.NODE_ENV === 'production'
-        //         ? {
-        //               key: `${process.env.PATH_TO_CERTS}client-key.pem`,
-        //               cert: `${process.env.PATH_TO_CERTS}client-cert.pem`,
-        //           }
-        //         : undefined
+        https:
+            process.env.NODE_ENV === 'production'
+                ? {
+                      key: `${process.env.PATH_TO_CERTS}client-key.pem`,
+                      cert: `${process.env.PATH_TO_CERTS}client-cert.pem`,
+                  }
+                : undefined,
     } as any,
 });
