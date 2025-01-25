@@ -12,6 +12,7 @@ type Config = {
     googleClientId: string;
     httpsCert: string;
     httpsKey: string;
+    serverUrl: string;
 };
 
 const REQUIRED_ENVIRONMENT_VARIABLES = [
@@ -24,6 +25,7 @@ const REQUIRED_ENVIRONMENT_VARIABLES = [
     'GOOGLE_CLIENT_ID',
     'HTTPS_KEY',
     'HTTPS_CERT',
+    'SERVER_URL',
 ];
 const checkEnvironmentVariables = () => {
     if (REQUIRED_ENVIRONMENT_VARIABLES.some((variable) => !(variable in process.env))) {
@@ -53,6 +55,7 @@ export const getConfig = () => {
             googleClientId: env.GOOGLE_CLIENT_ID,
             httpsCert: env.HTTPS_CERT,
             httpsKey: env.HTTPS_KEY,
+            serverUrl: env.SERVER_URL,
         };
     }
 

@@ -2,21 +2,22 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { config } from 'dotenv';
 import Express, { NextFunction, Request, Response } from 'express';
+import { createServer as createHttpsServer } from 'https';
+import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerUI from 'swagger-ui-express';
 import { authenticate, errorHandler } from '../middlewares';
 import {
     authRouter,
     commentRouter,
+    contentRouter,
+    fileRouter,
     likeRouter,
     postRouter,
-    userRouter,
-    contentRouter,
-    watchLaterRouter,
     recommendedRouter,
-    fileRouter,
+    userRouter,
+    watchLaterRouter,
 } from '../router';
 import { getConfig, initDBConnection } from '../services';
-import { createServer as createHttpsServer } from 'https';
-import { readFileSync } from 'fs';
 
 config();
 
@@ -39,6 +40,23 @@ export const initApp = async () => {
     app.use('/auth', authRouter);
     app.use('/public', Express.static('public'));
     app.use('/file', fileRouter);
+
+    if (env === 'development') {
+        const options = {
+            definition: {
+                openapi: '3.0.0',
+                info: {
+                    title: 'Web Dev 2022 REST API',
+                    version: '1.0.0',
+                    description: 'REST server including authentication using JWT',
+                },
+                servers: [{ url: `http://localhost:${port}` }],
+            },
+            apis: ['./src/docs/*.ts'],
+        };
+        const specs = swaggerJsDoc(options);
+        app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
+    }
 
     app.use(authenticate);
     app.use('/users', userRouter);

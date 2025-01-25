@@ -2,11 +2,10 @@ import { Router } from 'express';
 import multer from 'multer';
 import { getConfig } from '../services';
 
-const { port, env } = getConfig();
+const { serverUrl } = getConfig();
 
 export const fileRouter = Router();
 
-const base = `${env === 'production' ? 'https' : 'http'}://localhost:${port}/`;
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/');
@@ -21,7 +20,7 @@ const storage = multer.diskStorage({
             .join('.');
         const filename = Date.now() + '.' + ext;
 
-        cb(null, Date.now() + '.' + ext);
+        cb(null, filename);
     },
 });
 const upload = multer({ storage });
@@ -32,5 +31,5 @@ fileRouter.post('/', upload.single('file'), (req, res) => {
         return;
     }
 
-    res.status(200).send({ url: base + req.file.path });
+    res.status(200).send({ url: serverUrl + req.file.path });
 });
