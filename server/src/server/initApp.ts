@@ -22,7 +22,7 @@ config();
 
 export const initApp = async () => {
     await initDBConnection();
-    const { port, env, pathToCerts } = getConfig();
+    const { port, env, httpsCert, httpsKey } = getConfig();
 
     const app = Express();
 
@@ -55,19 +55,12 @@ export const initApp = async () => {
         res.status(500).send({ message: 'Error' });
     });
 
-    const server = (
-        env === 'development'
-            ? app
-            : createHttpsServer(
-                  {
-                      key: readFileSync(`${pathToCerts}client-key.pem`),
-                      cert: readFileSync(`${pathToCerts}client-key.pem`),
-                  },
-                  app
-              )
-    ).listen(port, () => {
-        console.log(`listening on port ${port} (${env === 'production' ? 'https' : 'http'})`);
-    });
+    const server = (env === 'development' ? app : createHttpsServer({ key: httpsKey, cert: httpsCert }, app)).listen(
+        port,
+        () => {
+            console.log(`listening on port ${port} (${env === 'production' ? 'https' : 'http'})`);
+        }
+    );
 
     return { app, server };
 };
