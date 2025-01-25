@@ -5,6 +5,7 @@ export const errorHandler = (err: Error, _req: Request, res: Response, _next: Ne
     if (err instanceof ApiError) {
         res.status(err.status).send({ message: err.message });
     } else {
+        console.error(err);
         res.status(500).send({ message: 'Internal Server Error' });
     }
 };

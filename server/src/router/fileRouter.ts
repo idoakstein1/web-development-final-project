@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import multer from 'multer';
+import { getConfig } from '../services';
 
 export const fileRouter = Router();
 
-const base = 'http://localhost:3030' + '/';
+const base = `http://localhost:${getConfig().port}` + '/';
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/');
