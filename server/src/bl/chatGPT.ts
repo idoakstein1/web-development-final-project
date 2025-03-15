@@ -25,6 +25,7 @@ export const getRecommended = async (userId: string) => {
             const seriesList = series.split(':')[1].split(',');
             let fullDataMovies: { id: string; name: string; year: string; type: string; poster: string }[] = [];
             let fullDataSeries: { id: string; name: string; year: string; type: string; poster: string }[] = [];
+            const idsHash: { [key: string]: boolean } = {};
             const fullDataMoviesPromise = moviesList.map((movie) => {
                 return searchItems({ title: movie.trim(), type: 'movie' })
                     .then((result) => {
@@ -35,6 +36,12 @@ export const getRecommended = async (userId: string) => {
                         if (!movie) {
                             return;
                         }
+
+                        if (idsHash[movie.id]) {
+                            return;
+                        }
+
+                        idsHash[movie.id] = true;
 
                         fullDataMovies.push({
                             id: movie.id,
@@ -58,6 +65,12 @@ export const getRecommended = async (userId: string) => {
                         if (!series) {
                             return;
                         }
+
+                        if (idsHash[series.id]) {
+                            return;
+                        }
+
+                        idsHash[series.id] = true;
 
                         fullDataSeries.push({
                             id: series.id,
