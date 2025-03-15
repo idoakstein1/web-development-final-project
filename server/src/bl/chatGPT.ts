@@ -6,7 +6,7 @@ const RECOMMENDED_PROMPT = `I like the following [movies/series]: [Place holder 
         series:name1,name2,name3`;
 
 export const getRecommended = async (userId: string) => {
-    const favorits = (await getFavoritePosts(userId)).map((post) => post.title);
+    const favorits = (await getFavoritePosts(userId)).map((post) => post.externalMovie.name);
 
     if (!favorits || favorits.length === 0) {
         return {
