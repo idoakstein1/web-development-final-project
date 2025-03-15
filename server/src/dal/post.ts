@@ -28,7 +28,7 @@ export const getPosts = async ({ userId, page, limit }: { userId: string; page: 
         .limit(limit)
         .select('-__v');
 
-    const totalPages = Math.ceil((await postModel.countDocuments()) / limit);
+    const totalPages = Math.ceil((await postModel.countDocuments({ 'user._id': { $ne: userId } })) / limit);
 
     return { posts, metadata: { hasNext: page < totalPages, nextPage: page < totalPages ? page + 1 : null } };
 };
