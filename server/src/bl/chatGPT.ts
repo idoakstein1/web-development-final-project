@@ -14,9 +14,17 @@ export const getRecommended = async (userId: string) => {
             series: [],
         };
     }
-
-    const completion = sendMessageToGPT(RECOMMENDED_PROMPT.replace('Place holder for favorits', favorits.join(', ')));
-
+    let completion;
+    try {
+        completion = sendMessageToGPT({
+            prompt: RECOMMENDED_PROMPT.replace('Place holder for favorits', favorits.join(', ')),
+        });
+    } catch (e) {
+        completion = sendMessageToGPT({
+            prompt: RECOMMENDED_PROMPT.replace('Place holder for favorits', favorits.join(', ')),
+            retry: true,
+        });
+    }
     return completion.then(async (result) => {
         const content = result.choices[0].message.content;
         if (content) {

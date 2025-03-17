@@ -9,6 +9,7 @@ type Config = {
     refreshTokenExpiration: string;
     port: number;
     chatGPTApiKey: string;
+    backupChatGPTApiKey: string;
     googleClientId: string;
     httpsCert: string;
     httpsKey: string;
@@ -52,6 +53,7 @@ export const getConfig = () => {
             refreshTokenExpiration: env.REFRESH_TOKEN_EXPIRATION,
             port: Number(env.PORT) || 8080,
             chatGPTApiKey: env.CHAT_GPT_API_KEY,
+            backupChatGPTApiKey: env.BACKUP_CHAT_GPT_API_KEY,
             googleClientId: env.GOOGLE_CLIENT_ID,
             httpsCert: env.HTTPS_CERT,
             httpsKey: env.HTTPS_KEY,
