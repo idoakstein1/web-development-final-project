@@ -16,89 +16,94 @@ export const getRecommended = async (userId: string) => {
     }
     let completion;
     try {
-        completion = sendMessageToGPT({
+        completion = await sendMessageToGPT({
             prompt: RECOMMENDED_PROMPT.replace('Place holder for favorits', favorits.join(', ')),
         });
     } catch (e) {
-        completion = sendMessageToGPT({
+        completion = await sendMessageToGPT({
             prompt: RECOMMENDED_PROMPT.replace('Place holder for favorits', favorits.join(', ')),
             retry: true,
         });
     }
-    return completion.then(async (result) => {
-        const content = result.choices[0].message.content;
-        if (content) {
-            const [movies, series] = content.split('\n');
-            const moviesList = movies.split(':')[1].split(',');
-            const seriesList = series.split(':')[1].split(',');
-            let fullDataMovies: { id: string; name: string; year: string; type: string; poster: string }[] = [];
-            let fullDataSeries: { id: string; name: string; year: string; type: string; poster: string }[] = [];
-            const idsHash: { [key: string]: boolean } = {};
-            const fullDataMoviesPromise = moviesList.map((movie) => {
-                return searchItems({ title: movie.trim(), type: 'movie' })
-                    .then((result) => {
-                        if (!result) {
-                            return;
-                        }
-                        const movie = result.items?.[0];
-                        if (!movie) {
-                            return;
-                        }
 
-                        if (idsHash[movie.id]) {
-                            return;
-                        }
+    const content = completion.choices[0].message.content;
 
-                        idsHash[movie.id] = true;
-
-                        fullDataMovies.push({
-                            id: movie.id,
-                            name: movie.name,
-                            year: movie.year,
-                            type: movie.type,
-                            poster: movie.poster,
-                        });
-                    })
-                    .catch(() => {
+    if (content) {
+        const [movies, series] = content.split('\n');
+        const moviesList = movies.split(':')[1].split(',');
+        const seriesList = series.split(':')[1].split(',');
+        let fullDataMovies: { id: string; name: string; year: string; type: string; poster: string }[] = [];
+        let fullDataSeries: { id: string; name: string; year: string; type: string; poster: string }[] = [];
+        const idsHash: { [key: string]: boolean } = {};
+        const fullDataMoviesPromise = moviesList.map((movie) => {
+            return searchItems({ title: movie.trim(), type: 'movie' })
+                .then((result) => {
+                    if (!result) {
                         return;
-                    });
-            });
-            const fullDataSeriesPromise = seriesList.flatMap((series) => {
-                return searchItems({ title: series.trim(), type: 'series' })
-                    .then((result) => {
-                        if (!result) {
-                            return;
-                        }
-                        const series = result.items?.[0];
-                        if (!series) {
-                            return;
-                        }
-
-                        if (idsHash[series.id]) {
-                            return;
-                        }
-
-                        idsHash[series.id] = true;
-
-                        fullDataSeries.push({
-                            id: series.id,
-                            name: series.name,
-                            year: series.year,
-                            type: series.type,
-                            poster: series.poster,
-                        });
-                    })
-                    .catch(() => {
+                    }
+                    const movie = result.items?.[0];
+                    if (!movie) {
                         return;
+                    }
+
+                    if (idsHash[movie.id]) {
+                        return;
+                    }
+
+                    idsHash[movie.id] = true;
+
+                    fullDataMovies.push({
+                        id: movie.id,
+                        name: movie.name,
+                        year: movie.year,
+                        type: movie.type,
+                        poster: movie.poster,
                     });
-            });
+                })
+                .catch(() => {
+                    return;
+                });
+        });
+        const fullDataSeriesPromise = seriesList.flatMap((series) => {
+            return searchItems({ title: series.trim(), type: 'series' })
+                .then((result) => {
+                    if (!result) {
+                        return;
+                    }
+                    const series = result.items?.[0];
+                    if (!series) {
+                        return;
+                    }
 
-            await Promise.all([...fullDataMoviesPromise, ...fullDataSeriesPromise]);
+                    if (idsHash[series.id]) {
+                        return;
+                    }
 
-            return {
-                movies: fullDataMovies,
-                series: fullDataSeries,
-            };
-        }
-    });
+                    idsHash[series.id] = true;
+
+                    fullDataSeries.push({
+                        id: series.id,
+                        name: series.name,
+                        year: series.year,
+                        type: series.type,
+                        poster: series.poster,
+                    });
+                })
+                .catch(() => {
+                    return;
+                });
+        });
+
+        await Promise.all([...fullDataMoviesPromise, ...fullDataSeriesPromise]);
+
+        return {
+            movies: fullDataMovies,
+            series: fullDataSeries,
+        };
+    } else {
+        return {
+            movies: [],
+            series: [],
+        };
+    }
 };
