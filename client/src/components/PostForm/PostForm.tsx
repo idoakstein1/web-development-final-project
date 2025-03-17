@@ -33,9 +33,9 @@ const formSchema = (currentPost?: Post) =>
                 })
                 .optional(),
         })
-        .refine(({ title, content, rate }) =>
+        .refine(({ title, content, rate,photo }) =>
             currentPost
-                ? title !== currentPost.title || content !== currentPost.content || rate !== currentPost.rate
+                ? title !== currentPost.title || content !== currentPost.content || rate !== currentPost.rate || photo
                 : true
         );
 type FormSchema = z.infer<ReturnType<typeof formSchema>>;
