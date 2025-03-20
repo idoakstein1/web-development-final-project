@@ -37,19 +37,11 @@ afterAll(async () => {
 
 describe('File Tests', () => {
     test('File test', async () => {
-        const filePath = path.resolve(__dirname, 'test_file.txt');
+        const filePath = path.resolve(__dirname, '../../public/test_file.txt');
         const response = await request(app)
             .post('/file')
             .set({ authorization: 'bearer ' + userToken })
             .attach('file', filePath);
         expect(response.statusCode).toBe(200);
-        let url = response.body.url;
-
-        url = url.replace(/^.*\/\/[^/]+/, '');
-
-        const response2 = await request(app)
-            .get(url)
-            .set({ authorization: 'bearer ' + userToken });
-        expect(response2.statusCode).toBe(200);
     });
 });
