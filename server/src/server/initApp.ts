@@ -41,22 +41,20 @@ export const initApp = async () => {
     app.use('/public', Express.static('public'));
     app.use('/file', fileRouter);
 
-    if (env === 'development') {
-        const options = {
-            definition: {
-                openapi: '3.0.0',
-                info: {
-                    title: 'Web Dev 2022 REST API',
-                    version: '1.0.0',
-                    description: 'REST server including authentication using JWT',
-                },
-                servers: [{ url: `http://localhost:${port}` }],
+    const options = {
+        definition: {
+            openapi: '3.0.0',
+            info: {
+                title: 'Web Dev 2022 REST API',
+                version: '1.0.0',
+                description: 'REST server including authentication using JWT',
             },
-            apis: ['./src/docs/*.ts'],
-        };
-        const specs = swaggerJsDoc(options);
-        app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
-    }
+            servers: [{ url: `http://localhost:${port}` }],
+        },
+        apis: ['./src/docs/*.ts'],
+    };
+    const specs = swaggerJsDoc(options);
+    app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 
     app.use(authenticate);
     app.use('/users', userRouter);
