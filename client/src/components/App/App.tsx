@@ -19,7 +19,7 @@ export const App = () => {
             {isAuthenticated && (
                 <>
                     <NavBar />
-                    <Divider orientation="vertical" sx={{ height: '100vh', marginX: '1%', borderRightWidth: 2 }} />
+                    <Divider orientation="vertical" sx={{ height: '100vh', marginX: '3%', borderRightWidth: 2 }} />
                 </>
             )}
             <Routes>
